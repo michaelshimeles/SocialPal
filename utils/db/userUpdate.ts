@@ -39,9 +39,9 @@ export const userUpdate = async ({
       .eq("email", email)
       .select();
 
-    if (data) return data;
+    if (error?.code) return error;
 
-    if (error) return error;
+    return data;
   } catch (error: any) {
     throw new Error(error.message);
   }

@@ -38,10 +38,11 @@ export const userCreate = async ({
       ])
       .select();
 
-    if (data) return data;
 
-    if (error) return error;
+    if (error?.code) return error;
+
+    return data;
   } catch (error: any) {
-    throw new Error(error.message)
+    throw new Error(error.message);
   }
 };

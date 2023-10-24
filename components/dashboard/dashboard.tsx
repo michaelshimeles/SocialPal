@@ -13,8 +13,6 @@ export default function Dashboard() {
 
   const search = searchParams.get('click')
 
-  console.log("Search", search)
-
   return (
     <div className="grid h-screen min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-zinc-100/40 lg:block dark:bg-zinc-800/40">
