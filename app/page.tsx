@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import Image from 'next/image'
 export default function Home() {
   return (
@@ -12,7 +14,12 @@ export default function Home() {
         <p className="leading-7 [&:not(:first-child)]:mt-2">
           Get 5 Social Media Managers for the price of a McChicken Combo
         </p>
-        <Image src="/dashboard.png" width={900} height={400} alt='dashboard' className='mt-[2rem] rounded-md drop-shadow-md'/>
+        <div className='mt-[1rem]'>
+          <Link href='/dashboard'>
+            <Button>Sign Up</Button>
+          </Link>
+        </div>
+        <Image src="/dashboard.png" width={900} height={400} alt='dashboard' className='mt-[2rem] rounded-md drop-shadow-md' />
       </div>
     </main >
   )
