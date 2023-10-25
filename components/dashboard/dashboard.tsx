@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { Profile } from "../Profile"
 import { BrandSelect } from './brand'
+import { Card, Text, Metric } from "@tremor/react";
+import LineChartComponent from '../chart/linechart'
+import BarChartComponent from '../chart/barchart'
 
 export default function Dashboard() {
   const searchParams = useSearchParams()
@@ -18,7 +21,7 @@ export default function Dashboard() {
       <div className="hidden border-r bg-zinc-100/40 lg:block dark:bg-zinc-800/40">
         <div className="flex flex-col gap-2">
           <div className="flex h-[60px] items-center px-6">
-            <Link className="flex items-center gap-2 font-semibold" href="#">
+            <Link className="flex items-center gap-2 font-semibold" href="/dashboard">
               <svg
                 className=" h-6 w-6"
                 fill="none"
@@ -35,7 +38,7 @@ export default function Dashboard() {
                 <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9" />
                 <path d="M12 3v6" />
               </svg>
-              <span className="">Ai Agency</span>
+              <span className="">AI Agency</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -434,7 +437,7 @@ export default function Dashboard() {
             </SheetContent>
           </Sheet>
           <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-            <form className="ml-auto flex-1 sm:flex-initial">
+            <form className="ml-auto flex-1 sm:flex-initial my-5">
               <BrandSelect />
             </form>
             <Profile />
@@ -443,10 +446,28 @@ export default function Dashboard() {
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           {search === null && <div><p>Pillars</p></div>}
           {search === "scheduler" && <div><p>Scheduler</p></div>}
-          {search === "analytics" && <div><p>Analytics</p></div>}
+          {search === "analytics" &&
+            <div>
+              <div className='flex justify-start flex-wrap gap-3'>
+                <Card className="max-w-xs space-y-2">
+                  <Text>Followers</Text>
+                  <Metric>34</Metric>
+                </Card>
+                <Card className="max-w-xs space-y-2">
+                  <Text>Gained (1d)</Text>
+                  <Metric>8%</Metric>
+                </Card>
+                <Card className="max-w-xs space-y-2">
+                  <Text>Likes (1d)</Text>
+                  <Metric>112</Metric>
+                </Card>
+              </div>
+              <div className='flex flex-col gap-4 mt-[1rem]'>
+                <LineChartComponent />
+                <BarChartComponent />
+              </div>
+            </div>}
           {search === "settings" && <div><p>Settings</p></div>}
-          <div className="h-20 rounded-lg border border-zinc-200 border-dashed dark:border-zinc-800" />
-          <div className="flex-1 rounded-lg border border-dashed border-zinc-200 dark:border-zinc-800" />
         </main>
       </div>
     </div>
