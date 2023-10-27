@@ -1,54 +1,122 @@
-import { BarChart, Card, Subtitle, Title } from "@tremor/react";
 
-  const chartdata = [
-    {
-      name: "Amphibians",
-      "Number of threatened species": 2488,
-    },
-    {
-      name: "Birds",
-      "Number of threatened species": 1445,
-    },
-    {
-      name: "Crustaceans",
-      "Number of threatened species": 743,
-    },
-    {
-      name: "Ferns",
-      "Number of threatened species": 281,
-    },
-    {
-      name: "Arachnids",
-      "Number of threatened species": 251,
-    },
-    {
-      name: "Corals",
-      "Number of threatened species": 232,
-    },
-    {
-      name: "Algae",
-      "Number of threatened species": 98,
-    },
-  ];
+import { useState } from "react"
+import CountUp from "react-countup"
+import { BarChart, Text, Metric } from "@tremor/react"
 
-const valueFormatter = (number: any) => `$ ${new Intl.NumberFormat("us").format(number).toString()}`;
+const dataFormatter = (number: number) => {
+  return Intl.NumberFormat("us").format(number).toString() + "bpm";
+};
 
-const BarChartComponent = () => (
-  <Card>
-    <Title>Number of species threatened with extinction (2021)</Title>
-    <Subtitle>
-      The IUCN Red List has assessed only a small share of the total known species in the world.
-    </Subtitle>
-    <BarChart
-      className="mt-6"
-      data={chartdata}
-      index="name"
-      categories={["Number of threatened species"]}
-      colors={["blue"]}
-      valueFormatter={valueFormatter}
-      yAxisWidth={48}
-    />
-  </Card>
-);
+interface ChartDataItem {
+  date: string;
+  Running: number;
+  Cycling: number;
+}
 
-export default BarChartComponent
+const chartdata: ChartDataItem[] = [
+  {
+    date: "Jan 23",
+    Running: 167,
+    Cycling: 145,
+  },
+  {
+    date: "Feb 23",
+    Running: 125,
+    Cycling: 110,
+  },
+  {
+    date: "Mar 23",
+    Running: 156,
+    Cycling: 149,
+  },
+  {
+    date: "Apr 23",
+    Running: 165,
+    Cycling: 112,
+  },
+  {
+    date: "May 23",
+    Running: 153,
+    Cycling: 138,
+  },
+  {
+    date: "Jun 23",
+    Running: 124,
+    Cycling: 145,
+  },
+  {
+    date: "Jul 23",
+    Running: 164,
+    Cycling: 134,
+  },
+  {
+    date: "Aug 23",
+    Running: 123,
+    Cycling: 110,
+  },
+  {
+    date: "Sep 23",
+    Running: 132,
+    Cycling: 113,
+  },
+];
+
+const categories = ["Running", "Cycling"]
+const initialAverageValue = chartdata.reduce((sum, dataPoint: any) => {
+    categories.forEach(category => {
+        sum += dataPoint[category];
+    });
+    return sum;
+}, 0) / (chartdata.length * categories.length);
+
+export default function Home() {
+  const [values, setValues] = useState({
+    start: 0,
+    end: initialAverageValue
+  })
+  return (
+    <div className="border light:border-gray-200 dark:border-white-700 p-7 rounded-md">
+      <Text>Average BPM</Text>
+      <Metric className="font-bold">
+        <CountUp
+            start={values.start}
+            end={values.end}
+            duration={0.8}
+        />
+      </Metric>
+      <BarChart
+        className="hidden sm:block mt-6 h-72"
+        data={chartdata}
+        index="date"
+        categories={categories}
+        colors={["blue", "indigo"]}
+        valueFormatter={dataFormatter}
+        yAxisWidth={60}
+        onValueChange={(v: any) => {
+          switch (v?.eventType) {
+            case 'bar':
+                setValues((prev) => ({
+                    start: prev.end,
+                    end: v[v.categoryClicked]
+                }))
+                break;
+            case 'category':
+                const averageCategoryValue = chartdata.reduce((sum, dataPoint: any) => sum + dataPoint[v.categoryClicked], 0) / chartdata.length;
+                
+                setValues((prev) => ({
+                    start: prev.end,
+                    end: averageCategoryValue
+                }))
+                break;
+            default:
+                setValues((prev) => ({
+                    start: prev.end,
+                    end: initialAverageValue
+                }))
+                break;
+          }
+        }}
+      />
+    </div>
+  )
+}

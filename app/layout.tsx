@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { NavBar } from '@/components/NavBar'
-
+import { GeistSans, GeistMono } from 'geist/font'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+        <body className={GeistSans.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
