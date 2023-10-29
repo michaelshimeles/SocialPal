@@ -55,12 +55,12 @@ const Scheduler = () => {
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
                                 console.log("Files: ", res);
+                                refetch()
                                 toast({
                                     title: "Upload Complete",
                                 })
-                                refetch()
                                 setOpen(false)
-                                
+
                             }}
                             onUploadError={(error: Error) => {
                                 console.log("Failed", error)
@@ -81,8 +81,8 @@ const Scheduler = () => {
             <div className='flex flex-wrap items-start justify-start gap-2 mt-[1rem]'>
                 {!isLoading ? content?.map((file: any, index: number) => {
                     return (
-                        <div>
-                            <Image key={index} src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
+                        <div key={index} >
+                            <Image src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
                         </div>)
                 }) : <p>Loading...</p>}
                 {error && <p>{error?.message}</p>}
