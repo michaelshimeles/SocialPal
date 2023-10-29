@@ -7,6 +7,7 @@ const contentUploadSchema = z.object({
   user_id: z.string().describe("user ID"),
   file_url: z.string().url({ message: "Invalid URL" }),
   visible: z.boolean(),
+  type: z.enum(["video", "image"]),
 });
 
 type contentUploadProps = z.infer<typeof contentUploadSchema>;
@@ -15,6 +16,7 @@ export const contentUpload = async ({
   user_id,
   file_url,
   visible,
+  type
 }: contentUploadProps) => {
   const supabase = createServerComponentClient({ cookies });
 
@@ -26,6 +28,7 @@ export const contentUpload = async ({
           user_id,
           file_url,
           visible,
+          type,
         },
       ])
       .select();

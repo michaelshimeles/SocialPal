@@ -1,22 +1,26 @@
+import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs";
 import { useToast } from '@/components/ui/use-toast';
 import { useGetContent } from '@/utils/hooks/useGetContent';
-import { UploadButton } from '@/utils/uploadthing';
+import { UploadDropzone } from "@uploadthing/react";
 import { Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-
+import ReactPlayer from 'react-player';
 
 const Scheduler = () => {
     const { toast } = useToast()
@@ -40,50 +44,77 @@ const Scheduler = () => {
                             Drag and drop your content to be uploaded.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input
-                                id="name"
-                                defaultValue="Pedro Duarte"
-                                className="col-span-3"
+                    <Tabs defaultValue="image" className="flex flex-col">
+                        <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="image">Image(s)</TabsTrigger>
+                            <TabsTrigger value="video">Video(s)</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="image">
+                            <UploadDropzone<OurFileRouter>
+                                endpoint="imageUploader"
+                                onClientUploadComplete={(res) => {
+                                    // Do something with the response
+                                    console.log("Files: ", res);
+                                    refetch()
+                                    toast({
+                                        title: "Upload Complete",
+                                    })
+                                    setOpen(false)
+                                }}
+                                onUploadError={(error: Error) => {
+                                    console.log("Failed", error)
+                                    toast({
+                                        title: "Upload Failed",
+                                        description: error.message,
+                                        variant: "destructive"
+                                    })
+                                }}
+                                onUploadBegin={(name) => {
+                                    // Do something once upload begins
+                                    console.log("Uploading: ", name);
+                                }}
                             />
-                        </div>
-                        <UploadButton
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                                console.log("Files: ", res);
-                                refetch()
-                                toast({
-                                    title: "Upload Complete",
-                                })
-                                setOpen(false)
-
-                            }}
-                            onUploadError={(error: Error) => {
-                                console.log("Failed", error)
-                                alert(`ERROR! ${error.message}`);
-                                toast({
-                                    title: "Upload Failed",
-                                    description: error.message,
-                                    variant: "destructive"
-                                })
-                            }}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                    </DialogFooter>
+                        </TabsContent>
+                        <TabsContent value="video">
+                            <UploadDropzone<OurFileRouter>
+                                endpoint="videoUploader"
+                                onClientUploadComplete={(res) => {
+                                    // Do something with the response
+                                    console.log("Files: ", res);
+                                    refetch()
+                                    toast({
+                                        title: "Upload Complete",
+                                    })
+                                    setOpen(false)
+                                }}
+                                onUploadError={(error: Error) => {
+                                    console.log("Failed", error)
+                                    toast({
+                                        title: "Upload Failed",
+                                        description: error.message,
+                                        variant: "destructive"
+                                    })
+                                }}
+                                onUploadBegin={(name) => {
+                                    // Do something once upload begins
+                                    console.log("Uploading: ", name);
+                                }}
+                            />
+                        </TabsContent>
+                    </Tabs>
                 </DialogContent>
             </Dialog>
-            <div className='flex flex-wrap items-start justify-start gap-2 mt-[1rem]'>
+            <div className='flex flex-wrap items-start gap-2 mt-[1rem]'>
                 {!isLoading ? content?.map((file: any, index: number) => {
-                    return (
-                        <div key={index} >
+                    if (file.type === "image") {
+                        return (<div key={index}>
                             <Image src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
                         </div>)
+                    } else {
+                        return (<div key={index} className='flex justify-start border rounded-sm'>
+                            <ReactPlayer light={true} width={400} height={200} url={file?.file_url} controls={true} pip={true} stopOnUnmount={false}/>
+                        </div>)
+                    }
                 }) : <p>Loading...</p>}
                 {error && <p>{error?.message}</p>}
             </div>

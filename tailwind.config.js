@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import { withUt } from "uploadthing/tw";
 
 const tremor = {
   content: [
@@ -125,7 +126,7 @@ const tremor = {
   plugins: [require("@headlessui/tailwindcss")],
 };
 
-module.exports = {
+module.exports = withUt({
   ...tremor,
   darkMode: ["class"],
   content: [
@@ -208,4 +209,4 @@ module.exports = {
     require("tailwindcss-animate"),
     ...tremor.plugins,
   ],
-}
+})
