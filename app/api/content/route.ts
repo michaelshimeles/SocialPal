@@ -1,4 +1,4 @@
-import { readContent } from "@/utils/db/readContent";
+import { readContent } from "@/server/db/readContent";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 

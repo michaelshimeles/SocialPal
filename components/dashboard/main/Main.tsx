@@ -1,18 +1,11 @@
-import { useToast } from '@/components/ui/use-toast';
-import { UploadButton } from '@/utils/uploadthing';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
 import AnalyticsSection from './analytics/analytics';
-import Scheduler from './scheduler/Scheduler';
 import Pillars from './pillars/Pillars';
+import Scheduler from './scheduler/Scheduler';
 import SettingsDashboard from './settings/Settings';
 
-interface MainProps {
 
-}
-
-const MainDashboard: React.FC<MainProps> = ({ }) => {
-    const { toast } = useToast()
+const MainDashboard = () => {
 
     const searchParams = useSearchParams()
 

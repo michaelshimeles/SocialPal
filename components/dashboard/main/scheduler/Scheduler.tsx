@@ -2,53 +2,90 @@ import { useToast } from '@/components/ui/use-toast';
 import { UploadButton } from '@/utils/uploadthing';
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
-interface SchedulerProps {
+import { Button } from '@/components/ui/button';
+import { Upload } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useGetContent } from '@/utils/hooks/useGetContent';
 
-}
 
-const Scheduler: React.FC<SchedulerProps> = ({ }) => {
+const Scheduler = () => {
     const { toast } = useToast()
-    const [content, setContent] = useState<any>(null)
+    const [open, setOpen] = useState<boolean>(false);
 
-    useEffect(() => {
-        const getContent = async () => {
-            const response = await fetch(`http://localhost:3000/api/content`)
+    const { data: content, error, isLoading, refetch } = useGetContent()
 
-            const result = await response.json()
-
-            console.log("Fired", result)
-            setContent(result)
-            return result
-        }
-
-        getContent()
-    }, [])
-
-    console.log('content', content)
     return (
-        <div className='flex flex-col'>
-            <UploadButton
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
-                    console.log("Files: ", res);
-                    toast({
-                        title: "Upload Complete",
-                    })
-                }}
-                onUploadError={(error: Error) => {
-                    console.log("Failed", error)
-                    alert(`ERROR! ${error.message}`);
-                    toast({
-                        title: "Upload Failed",
-                        description: error.message,
-                        variant: "destructive"
-                    })
-                }}
-            />
-            <div className='flex flex-wrap space-x-3 mt-[1rem]'>
-                {content?.map((file: any, index: number) => {
-                    return (<Image key={index} src={file?.file_url} width={300} height={100} alt="" className='rounded-md drop-shadow-lg'/>)
-                })}
+        <div className='flex flex-col items-start'>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                    <Button className='flex justify-center gap-2'>
+                        <Upload />
+                        Upload
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Upload Contant</DialogTitle>
+                        <DialogDescription>
+                            Drag and drop your content to be uploaded.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                                Name
+                            </Label>
+                            <Input
+                                id="name"
+                                defaultValue="Pedro Duarte"
+                                className="col-span-3"
+                            />
+                        </div>
+                        <UploadButton
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log("Files: ", res);
+                                toast({
+                                    title: "Upload Complete",
+                                })
+                                refetch()
+                                setOpen(false)
+                                
+                            }}
+                            onUploadError={(error: Error) => {
+                                console.log("Failed", error)
+                                alert(`ERROR! ${error.message}`);
+                                toast({
+                                    title: "Upload Failed",
+                                    description: error.message,
+                                    variant: "destructive"
+                                })
+                            }}
+                        />
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit">Save changes</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <div className='flex flex-wrap items-start justify-start gap-2 mt-[1rem]'>
+                {!isLoading ? content?.map((file: any, index: number) => {
+                    return (
+                        <div>
+                            <Image key={index} src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
+                        </div>)
+                }) : <p>Loading...</p>}
+                {error && <p>{error?.message}</p>}
             </div>
         </div>
     );

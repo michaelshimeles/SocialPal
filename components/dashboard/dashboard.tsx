@@ -4,7 +4,7 @@ import { BrandSelect } from './brand'
 import MainDashboard from "./main/Main"
 import SheetDashboard from "./mobile/sheet"
 import NavigationDashboard from "./nav/Navigation"
-import LogoDashboard from "./Logo/Logo"
+import LogoDashboard from "./logo/Logo"
 
 export default function Dashboard() {
 

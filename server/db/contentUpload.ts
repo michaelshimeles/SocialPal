@@ -1,10 +1,11 @@
+"use server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
 const contentUploadSchema = z.object({
-  user_id: z.string(),
-  file_url: z.string(),
+  user_id: z.string().describe("user ID"),
+  file_url: z.string().url({ message: "Invalid URL" }),
   visible: z.boolean(),
 });
 
@@ -30,11 +31,11 @@ export const contentUpload = async ({
       .select();
 
     if (error?.code) {
-        console.log("error", error)
-        return error;
+      console.log("error", error);
+      return error;
     }
 
-    console.log("data", data)
+    console.log("data", data);
 
     return data;
   } catch (error: any) {

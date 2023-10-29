@@ -1,15 +1,34 @@
+"use server"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
 const userCreateSchema = z.object({
-  email: z.string(),
-  first_name: z.string(),
-  last_name: z.string(),
-  gender: z.string(),
-  profile_image_url: z.string(),
-  user_id: z.string(),
+  email: z
+    .string()
+    .email({ message: "Invalid email" })
+    .describe("user email"),
+  first_name: z
+    .string()
+    .regex(/^[a-zA-Z]+$/, { message: "First name must only contain letters" })
+    .min(3, { message: "First name is required" })
+    .describe("user first name"),
+  last_name: z
+    .string()
+    .regex(/^[a-zA-Z]+$/, { message: "Last name must only contain letters" })
+    .min(3, { message: "Last name is required" })
+    .describe("user last name"),
+  gender: z
+    .enum(["Male", "Female", "Preferred not to say"])
+    .describe("user gender"),
+  profile_image_url: z
+    .string()
+    .url({ message: "Invalid URL" })
+    .optional()
+    .describe("user profile image URL"),
+  user_id: z.string().describe("user ID"),
 });
+
 
 type userCreateProps = z.infer<typeof userCreateSchema>;
 
