@@ -4,10 +4,9 @@ import { BrandSelect } from './brand'
 import MainDashboard from "./main/Main"
 import SheetDashboard from "./mobile/sheet"
 import NavigationDashboard from "./nav/Navigation"
-import LogoDashboard from "./logo/Logo"
+import LogoDashboard from "./logo/LogoDashboard"
 
 export default function Dashboard() {
-
   return (
     <div className="grid h-screen min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-zinc-100/40 lg:block dark:bg-zinc-800/40">

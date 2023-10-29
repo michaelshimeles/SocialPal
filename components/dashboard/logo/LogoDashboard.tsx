@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const LogoDashboard =({ }) => {
+const LogoDashboard =() => {
     return (
         <div className="flex h-[60px] items-center px-6">
             <Link className="flex items-center gap-2 font-semibold" href="/dashboard">

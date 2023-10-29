@@ -1,9 +1,4 @@
-import { useToast } from '@/components/ui/use-toast';
-import { UploadButton } from '@/utils/uploadthing';
-import React, { useEffect, useState } from 'react'
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Upload } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -12,10 +7,15 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from '@/components/ui/use-toast';
 import { useGetContent } from '@/utils/hooks/useGetContent';
+import { UploadButton } from '@/utils/uploadthing';
+import { Upload } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 
 const Scheduler = () => {
