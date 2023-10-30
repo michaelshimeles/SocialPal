@@ -1,4 +1,3 @@
-import LineChartComponent from '@/components/chart/linechart';
 import BarChartComponent from '@/components/chart/barchart';
 import { Card, Metric, Text } from '@tremor/react';
 import React from 'react'
@@ -25,7 +24,6 @@ const AnalyticsSection: React.FC<analyticsProps> = ({ }) => {
                 </Card>
             </div>
             <div className='flex flex-col gap-4 mt-[1rem]'>
-                <LineChartComponent />
                 <BarChartComponent />
             </div>
         </div>
