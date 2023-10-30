@@ -28,11 +28,12 @@ export const ourFileRouter = {
       console.log("Metadata", metadata);
       console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url);
+      console.log("file", file);
 
       await contentUpload({
         user_id: metadata.userId,
         file_url: file.url,
+        file_key: file.key,
         visible: true,
         type: "image"
       });
@@ -62,6 +63,7 @@ export const ourFileRouter = {
       await contentUpload({
         user_id: metadata.userId,
         file_url: file.url,
+        file_key: file.key,
         visible: true,
         type: "video"
       });

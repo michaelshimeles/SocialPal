@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
                     Privacy Policy</h1>
 
                 <p className="leading-7 [&:not(:first-child)]:mt-6">
-                    Your privacy is important to us. It is Social Pal&apos;s policy to respect your privacy regarding any information we may collect from you across our website, <a href="https://smm-ai.vercel.app/">https://smm-ai.vercel.app/</a>, and other platforms we operate.</p>
+                    Your privacy is important to us. It is Social Pal&apos;s policy to respect your privacy regarding any information we may collect from you across our website, <a href="https://www.heysocialpal.com/">https://www.heysocialpal.com</a>, and other platforms we operate.</p>
 
                 <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                     Information We Collect</h2>
@@ -62,7 +62,7 @@ const PrivacyPolicy = () => {
                     Contact Us</h2>
 
                 <p className="leading-7 [&:not(:first-child)]:mt-6">
-                    If you have any questions or suggestions about our Privacy Policy, please contact us at info@smm-ai.vercel.app.</p>
+                    If you have any questions or suggestions about our Privacy Policy, please contact us at mshimeles96@gmail.com.</p>
 
                 <p className="leading-7 [&:not(:first-child)]:mt-6">
                     This privacy policy was last updated on October 11th, 2023.</p>

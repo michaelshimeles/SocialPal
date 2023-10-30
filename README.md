@@ -1,2 +1,2 @@
-## AI Agency 
+## Social Pals
 

@@ -12,7 +12,7 @@ const TermsPage = () => {
                     1. Terms
                 </h2>
                 <p className="leading-7 [&:not(:first-child)]:mt-6">
-                    By accessing the website at <a href="https://smm-ai.vercel.app/">https://smm-ai.vercel.app/</a>, you are agreeing to be bound by these terms of service, all applicable laws, and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained on this website are protected by applicable copyright and trademark law.
+                    By accessing the website at <a href="https://www.heysocialpal.com/">https://www.heysocialpal.com</a>, you are agreeing to be bound by these terms of service, all applicable laws, and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained on this website are protected by applicable copyright and trademark law.
                 </p>
 
                 <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">

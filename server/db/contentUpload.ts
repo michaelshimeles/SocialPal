@@ -6,6 +6,7 @@ import { z } from "zod";
 const contentUploadSchema = z.object({
   user_id: z.string().describe("user ID"),
   file_url: z.string().url({ message: "Invalid URL" }),
+  file_key: z.string().describe("file key"),
   visible: z.boolean(),
   type: z.enum(["video", "image"]),
 });
@@ -15,6 +16,7 @@ type contentUploadProps = z.infer<typeof contentUploadSchema>;
 export const contentUpload = async ({
   user_id,
   file_url,
+  file_key,
   visible,
   type
 }: contentUploadProps) => {
@@ -27,6 +29,7 @@ export const contentUpload = async ({
         {
           user_id,
           file_url,
+          file_key,
           visible,
           type,
         },

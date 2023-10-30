@@ -10,7 +10,7 @@ import Provider from '@/utils/provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Agency',
+  title: 'Social Pal',
   description: 'Use Ai to ideate, plan, and schedule content 5x faster',
 }
 
@@ -23,6 +23,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={GeistSans.className}>
+          <div id="fb-root"></div>
+          <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0&appId=2319304708277666" nonce="P6Q9cTmd"></script>
           <Provider>
             <ThemeProvider
               attribute="class"
@@ -37,6 +39,6 @@ export default function RootLayout({
           </Provider>
         </body>
       </html>
-    </ClerkProvider>
+    </ClerkProvider >
   )
 }
