@@ -116,7 +116,7 @@ const Scheduler = () => {
             </div>
             <div className='flex flex-wrap items-start gap-2 mt-[1rem]'>
                 {!isLoading ? content?.map((file: any, index: number) => {
-                    if (file.type === "image") {
+                    if (file?.type === "image") {
                         return (<div key={index} onClick={() => setSelected({
                             selectedFile: file?.file_url,
                             selected: true
