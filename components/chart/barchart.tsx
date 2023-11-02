@@ -1,4 +1,4 @@
-
+"use client"
 import { useState } from "react"
 import CountUp from "react-countup"
 import { BarChart, Text, Metric } from "@tremor/react"

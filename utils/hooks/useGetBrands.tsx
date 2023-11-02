@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
-async function fetchContent() {
+async function fetchBrands() {
     try {
-        const response = await fetch(`/api/content`);
+        const response = await fetch(`/api/brand/read`);
         const result = await response.json()
 
         return result
@@ -11,9 +11,9 @@ async function fetchContent() {
     }
 }
 
-export const useGetContent = () => {
+export const useGetBrands = () => {
     return useQuery({
-        queryKey: ["get-content"],
-        queryFn: () => fetchContent(),
+        queryKey: ["get-brands"],
+        queryFn: () => fetchBrands(),
     });
 };

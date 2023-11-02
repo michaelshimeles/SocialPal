@@ -1,12 +1,9 @@
+"use client"
 import BarChartComponent from '@/components/chart/barchart';
 import { Card, Metric, Text } from '@tremor/react';
 import React from 'react'
 
-interface analyticsProps {
-
-}
-
-const AnalyticsSection: React.FC<analyticsProps> = ({ }) => {
+const AnalyticsSection = ({ }) => {
     return (
         <div>
             <div className='flex justify-start flex-wrap gap-3 mt-2 z-0'>

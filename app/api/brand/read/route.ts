@@ -1,4 +1,4 @@
-import { readContent } from "@/server/db/read-content";
+import { readBrands } from "@/server/db/read-brands";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
@@ -6,7 +6,7 @@ export async function GET() {
   const { userId } = auth();
 
   try {
-    const result = await readContent({ user_id: userId! });
+    const result = await readBrands({ user_id: userId! });
 
     return NextResponse.json(result, { status: 200 });
   } catch (error: any) {

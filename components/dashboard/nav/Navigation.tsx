@@ -2,21 +2,17 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
 
-interface NavigationProps {
-
-}
-
-const NavigationDashboard: React.FC<NavigationProps> = ({ }) => {
+const NavigationDashboard = ({ }) => {
     const searchParams = useSearchParams()
 
     const search = searchParams.get('click')
 
     return (
         <nav className="grid items-start px-4 text-sm font-medium">
-            {search === null ?
+            {search === "pillars" ?
                 <Link
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-900 transition-all hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:text-zinc-50 bg-zinc-100"
-                    href="/dashboard"
+                    href="?click=pillar"
                 >
                     <svg
                         className=" h-4 w-4"
@@ -39,7 +35,7 @@ const NavigationDashboard: React.FC<NavigationProps> = ({ }) => {
                     Content Pillars
                 </Link> : <Link
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-500 transition-all hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-                    href="/dashboard"
+                    href="?click=pillar"
                 >
                     <svg
                         className=" h-4 w-4"

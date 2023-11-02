@@ -1,3 +1,4 @@
+"use client"
 import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +22,7 @@ import { Trash2, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
+import Video from 'next-video';
 
 const Scheduler = () => {
     const { toast } = useToast()
@@ -59,7 +61,6 @@ const Scheduler = () => {
                                     endpoint="imageUploader"
                                     onClientUploadComplete={(res) => {
                                         // Do something with the response
-                                        console.log("Files: ", res);
                                         refetch()
                                         toast({
                                             title: "Upload Complete",
@@ -114,7 +115,7 @@ const Scheduler = () => {
                     Delete
                 </Button>
             </div>
-            <div className='flex flex-wrap items-start gap-2 mt-[1rem]'>
+            {/* <div className='flex flex-wrap items-start gap-2 mt-[1rem]'>
                 {!isLoading ? content?.map((file: any, index: number) => {
                     if (file?.type === "image") {
                         return (<div key={index} onClick={() => setSelected({
@@ -143,7 +144,7 @@ const Scheduler = () => {
                     }
                 }) : <p>Loading...</p>}
                 {error && <p>{error?.message}</p>}
-            </div>
+            </div> */}
         </div>
     );
 }

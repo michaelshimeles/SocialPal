@@ -1,3 +1,4 @@
+"use client"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,15 +12,6 @@ export default function Home() {
           </h1>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-brain-cog"><circle cx="12" cy="12" r="3" /><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 12 4.5" /><path d="m15.7 10.4-.9.4" /><path d="m9.2 13.2-.9.4" /><path d="m13.6 15.7-.4-.9" /><path d="m10.8 9.2-.4-.9" /><path d="m15.7 13.5-.9-.4" /><path d="m9.2 10.9-.9-.4" /><path d="m10.5 15.7.4-.9" /><path d="m13.1 9.2.4-.9" /></svg>
         </div>
-        <p className="leading-7 [&:not(:first-child)]:mt-2">
-          Slash your Social Media Content Planning Time & Cost by 85% using Social Pal AI
-        </p>
-        <div className='mt-[1rem]'>
-          <Link href='/dashboard'>
-            <Button>Sign Up</Button>
-          </Link>
-        </div>
-        <Image src="/dashboard.png" width={900} height={400} alt='dashboard' className='mt-[2rem] rounded-md drop-shadow-2xl border border-gray-700' />
       </div>
     </main >
   )

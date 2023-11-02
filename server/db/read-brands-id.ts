@@ -1,28 +1,29 @@
-"use server"
+"use server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-const readContentSchema = z.object({
+const readBrandsSchema = z.object({
   user_id: z.string(),
+  brand_id: z.string(),
 });
 
-type readContentProps = z.infer<typeof readContentSchema>;
+type readBrandProps = z.infer<typeof readBrandsSchema>;
 
-export const readContent = async ({ user_id }: readContentProps) => {
+export const readBrandsById = async ({ brand_id }: readBrandProps) => {
   const supabase = createServerComponentClient({ cookies });
 
   try {
-    let { data: Content, error } = await supabase
-      .from("Content")
+    let { data: brands, error } = await supabase
+      .from("Brands")
       .select("*")
-      .eq("user_id", user_id);
+      .eq("brand_id", brand_id);
+
 
     if (error?.code) {
-      console.log("error", error);
       return error;
     }
-    return Content;
+    return brands;
   } catch (error: any) {
     throw new Error(error.message);
   }

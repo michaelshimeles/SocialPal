@@ -1,10 +1,11 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Link from 'next/link';
 import NavigationDashboard from '../nav/Navigation';
 
 
-const SheetDashboard = () => {  
+const SheetDashboard = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>

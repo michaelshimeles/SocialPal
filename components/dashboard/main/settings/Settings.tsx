@@ -1,11 +1,9 @@
+"use client"
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Instagram, Clapperboard } from 'lucide-react';
-interface SettingsProps {
 
-}
-
-const SettingsDashboard: React.FC<SettingsProps> = ({ }) => {
+const SettingsDashboard = ({ }) => {
 
 
     return (

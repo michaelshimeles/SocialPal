@@ -1,13 +1,11 @@
-import React from 'react'
+"use client"
 
-interface PillarsProps {
+import { Button } from "@/components/ui/button";
 
-}
-
-const Pillars: React.FC<PillarsProps> = ({ }) => {
+const Pillars = ({ }) => {
     return (
         <div>
-            <p>Pillars</p>
+            <Button>Create Content Pillars</Button>
         </div>
     );
 }

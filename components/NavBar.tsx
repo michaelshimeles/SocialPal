@@ -1,38 +1,26 @@
 "use client"
-
 import {
     NavigationMenu,
-    NavigationMenuContent,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
+    navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@clerk/nextjs"
 import { Dialog, DialogClose } from "@radix-ui/react-dialog"
-import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 import { GiHamburgerMenu } from "react-icons/gi"
 import { ModeToggle } from "./ModeToggle"
-import { Profile } from "./Profile"
-import { SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
-import { useAuth } from "@clerk/nextjs";
 import { Button } from "./ui/button"
-import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover"
+import { SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
+import { Profile } from "./Profile"
+import { useUser } from "@clerk/nextjs";
 
-const components: { title: string; href: string; description: string }[] = [
-    {
-        title: "Blog",
-        href: "/resources/blog",
-        description:
-            "Deepen your knowledge.",
-    },
-]
 
 export function NavBar() {
-    const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const { user } = useUser();
 
 
     return (
@@ -75,16 +63,16 @@ export function NavBar() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/dashboard" legacyBehavior passHref className="cursor-pointer">
+                        <Link href="/brand" legacyBehavior passHref className="cursor-pointer">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Dashboard
+                                Choose Brand
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center gap-3">
-                {/* {userId && <Profile />} */}
+                {user && <Profile />}
                 <ModeToggle />
             </div>
         </div>
