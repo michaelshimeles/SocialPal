@@ -7,37 +7,15 @@ const NavigationDashboard = ({ }) => {
 
     const search = searchParams.get('click')
 
+
     return (
         <nav className="grid items-start px-4 text-sm font-medium">
-            {search === "pillars" ?
+            {search !== "pillar" ?
                 <Link
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-900 transition-all hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:text-zinc-50 bg-zinc-100"
-                    href="?click=pillar"
-                >
-                    <svg
-                        className=" h-4 w-4"
-                        fill="none"
-                        height="24"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <rect height="18" rx="2" width="18" x="3" y="3" />
-                        <path d="M9 14v1" />
-                        <path d="M9 19v2" />
-                        <path d="M9 3v2" />
-                        <path d="M9 9v1" />
-                    </svg>
-                    Content Pillars
-                </Link> : <Link
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-500 transition-all hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                     href="?click=pillar"
                 >
-                    <svg
+                    < svg
                         className=" h-4 w-4"
                         fill="none"
                         height="24"
@@ -49,12 +27,31 @@ const NavigationDashboard = ({ }) => {
                         width="24"
                         xmlns="http://www.w3.org/2000/svg"
                     >
-                        <rect height="18" rx="2" width="18" x="3" y="3" />
-                        <path d="M9 14v1" />
-                        <path d="M9 19v2" />
-                        <path d="M9 3v2" />
-                        <path d="M9 9v1" />
-                    </svg>
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg >
+                    Content Pillars
+                </Link> : <Link
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-900 transition-all hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:text-zinc-50 bg-zinc-100"
+                    href="?click=pillar"
+                >
+                    < svg
+                        className=" h-4 w-4"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg >
                     Content Pillars
                 </Link>}
             {search !== "scheduler" ? <Link

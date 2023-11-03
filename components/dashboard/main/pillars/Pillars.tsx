@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea";
 import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById";
+import { useGetContentPillars } from "@/utils/hooks/useGetContentPillars";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -29,6 +30,8 @@ const Pillars = ({ }) => {
     const [content, setContent] = useState<any>(null)
 
     const { data, error } = useGetBrandsById(brandId)
+    const { data: contentPillar, error: contentPillarError } = useGetContentPillars(brandId)
+
     const {
         register,
         handleSubmit,
@@ -81,9 +84,12 @@ const Pillars = ({ }) => {
         }
     }
 
-    console.log("content", content?.choices?.[0]?.message?.content)
+    console.log("content", contentPillar)
+
+    const contentLines = contentPillar?.[0]?.content.split('\n');
+
     return (
-        <div>
+        <div className="flex flex-col">
             <Dialog>
                 <DialogTrigger asChild>
                     <Button>Create Content Pillars</Button>
@@ -129,7 +135,12 @@ const Pillars = ({ }) => {
                     </form>
                 </DialogContent>
             </Dialog>
-
+            <div className="flex flex-col my-[2rem]">
+                {contentLines?.map((line: string, index: number) => (
+                    // Check if the line is not empty to avoid adding extra space for empty lines
+                    line ? <p key={index}>{line}</p> : <br key={index} />
+                ))}
+            </div>
         </div>
     );
 }

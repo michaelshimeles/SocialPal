@@ -1,6 +1,7 @@
 "use client"
 import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
     Dialog,
     DialogContent,
@@ -9,29 +10,37 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs";
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { useGetContent } from '@/utils/hooks/useGetContent';
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { UploadDropzone } from "@uploadthing/react";
 import { Trash2, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
-import Video from 'next-video';
-import { usePathname } from 'next/navigation';
+import { PopoverClose } from '@radix-ui/react-popover';
 
 const Scheduler = () => {
     const { toast } = useToast()
+    const [date, setDate] = useState<Date | undefined>(new Date())
     const [open, setOpen] = useState<boolean>(false);
     const [selected, setSelected] = useState<{
         selectedFile: string,
         selected: boolean
     } | null>(null)
+
+    console.log("date", date)
 
     const { data: content, error, isLoading, refetch } = useGetContent()
 
@@ -118,30 +127,131 @@ const Scheduler = () => {
                 </Button>
             </div>
             <div className='flex flex-wrap items-start gap-2 mt-[1rem]'>
+
                 {!isLoading ? content?.map((file: any, index: number) => {
                     if (file?.type === "image") {
                         return (<div key={index} onClick={() => setSelected({
                             selectedFile: file?.file_url,
                             selected: true
                         })}>
-                            {(selected?.selectedFile === file?.file_url && selected?.selected) ? <Image src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg border-2 border-green-500' />
-                                : <Image src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
-                            }
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Image src={file?.file_url} width={200} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
+                                </SheetTrigger>
+                                <SheetContent>
+                                    <SheetHeader>
+                                        <SheetTitle>Schedule Image</SheetTitle>
+                                        <SheetDescription>
+                                            Make changes to your profile here. Click save when you're done.
+                                        </SheetDescription>
+                                    </SheetHeader>
+                                    <div className="flex flex-col gap-3 my-4">
+                                        <div className="flex mt-[1rem]">
+                                            <Image src={file?.file_url} width={400} height={100} sizes="(max-width: 768px) 100vw, 33vw" alt="" className='rounded-md drop-shadow-lg' />
+                                        </div>
+                                        <div className='flex flex-col gap-3 mt-[12px]'>
+                                            <div className='flex flex-col items-start gap-2'>
+                                                <Label>
+                                                    Caption
+                                                </Label>
+                                                <Textarea />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button variant="outline" className='text-left w-full'>Select Date</Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={date}
+                                                        onSelect={setDate}
+                                                        className="rounded-md border shadow"
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                        <div className='flex flex-col gap-3'>
+                                            <Select>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select social media platform" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="tiktok">TikTok</SelectItem>
+                                                    <SelectItem value="instagram">Instagram</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <SheetClose asChild>
+                                            <Button type="submit">Schedule</Button>
+                                        </SheetClose>
+                                    </div>
+                                </SheetContent>
+                            </Sheet>
                         </div>)
                     } else {
                         return (<div key={index} onClick={() => setSelected({
                             selectedFile: file?.file_url,
                             selected: true
                         })} className='flex justify-start border rounded-sm'>
-                            {(selected?.selectedFile === file?.file_url && selected?.selected) ?
-                                <div className="border-2 rounded-md border-green-500">
-                                    <ReactPlayer light={true} width={400} height={200} url={file?.file_url} controls={true} pip={true} stopOnUnmount={false} />
-                                </div>
-                                :
-                                <div>
-                                    <ReactPlayer light={true} width={400} height={200} url={file?.file_url} controls={true} pip={true} stopOnUnmount={false} />
-                                </div>
-                            }
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <div className='rounded-md drop-shadow-lg'>
+                                        <ReactPlayer light={true} width={400} height={200} url={file?.file_url} controls={true} pip={true} stopOnUnmount={false} />
+                                    </div>
+                                </SheetTrigger>
+                                <SheetContent>
+                                    <SheetHeader>
+                                        <SheetTitle>Schedule Video</SheetTitle>
+                                        <SheetDescription>
+                                            Make changes to your profile here. Click save when you're done.
+                                        </SheetDescription>
+                                    </SheetHeader>
+                                    <div className="flex flex-col gap-3 my-4">
+                                        <div className="flex justify-center">
+                                            <ReactPlayer light={true} width={400} height={200} url={file?.file_url} controls={true} pip={true} stopOnUnmount={false} />
+                                        </div>
+                                        <div className='flex flex-col gap-3 mt-[12px]'>
+                                            <div className='flex flex-col items-start gap-2'>
+                                                <Label>
+                                                    Caption
+                                                </Label>
+                                                <Textarea />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button variant="outline" className='text-left w-full'>Select Date</Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={date}
+                                                        onSelect={setDate}
+                                                        className="rounded-md border shadow"
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                        <div className='flex flex-col gap-3'>
+                                            <Select>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select social media platform" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="tiktok">TikTok</SelectItem>
+                                                    <SelectItem value="instagram">Instagram</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <SheetClose asChild>
+                                            <Button type="submit">Schedule</Button>
+                                        </SheetClose>
+                                    </div>
+                                </SheetContent>
+                            </Sheet>
                         </div>)
                     }
                 }) : <p>Loading...</p>}
