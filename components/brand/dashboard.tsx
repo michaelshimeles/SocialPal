@@ -32,7 +32,7 @@ export default function Dashboard() {
     }
 
     authorizationCheck()
-  }, [brandId])
+  }, [brandId, router])
 
   const { data, error, isLoading } = useGetBrandsById(brandId)
   return (

@@ -90,7 +90,7 @@ const PillarCard: React.FC<PillarCardProps> = ({ title, description, pillar, ref
             </h3>
 
             <p className="mt-2 line-clamp-3 text-sm/relaxed">
-                Content Pillars for brand's social media
+                Content Pillars for brand&apos;s social media
             </p>
 
             <div
