@@ -21,13 +21,7 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      await contentUpload({
-        user_id: metadata.userId,
-        file_url: file.url,
-        file_key: file.key,
-        visible: true,
-        type: "image"
-      });
+
     }),
   videoUploader: f({
     video: { maxFileSize: "256MB", maxFileCount: 10 },
@@ -44,13 +38,7 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      await contentUpload({
-        user_id: metadata.userId,
-        file_url: file.url,
-        file_key: file.key,
-        visible: true,
-        type: "video"
-      });
+
     }),
 } satisfies FileRouter;
 

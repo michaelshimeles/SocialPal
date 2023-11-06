@@ -9,6 +9,7 @@ const contentUploadSchema = z.object({
   file_key: z.string().describe("file key"),
   visible: z.boolean(),
   type: z.enum(["video", "image"]),
+  brand_id: z.string().describe("brand ID"),
 });
 
 type contentUploadProps = z.infer<typeof contentUploadSchema>;
@@ -18,7 +19,8 @@ export const contentUpload = async ({
   file_url,
   file_key,
   visible,
-  type
+  type,
+  brand_id
 }: contentUploadProps) => {
   const supabase = createServerComponentClient({ cookies });
 
@@ -32,6 +34,7 @@ export const contentUpload = async ({
           file_key,
           visible,
           type,
+          brand_id,
         },
       ])
       .select();

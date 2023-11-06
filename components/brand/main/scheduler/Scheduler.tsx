@@ -30,8 +30,16 @@ import Image from 'next/image';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { PopoverClose } from '@radix-ui/react-popover';
+import { contentUpload } from '@/server/db/contentUpload';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
 
 const Scheduler = () => {
+    const pathname = usePathname()
+
+    const brandId = pathname.split("/brand/")[1]
+    const { userId } = useAuth();
+
     const { toast } = useToast()
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [open, setOpen] = useState<boolean>(false);
@@ -40,7 +48,7 @@ const Scheduler = () => {
         selected: boolean
     } | null>(null)
 
-    const { data: content, error, isLoading, refetch } = useGetContent()
+    const { data: content, error, isLoading, refetch } = useGetContent(brandId)
 
     return (
         <div className='flex flex-col items-start'>
@@ -67,8 +75,16 @@ const Scheduler = () => {
                             <TabsContent value="image">
                                 <UploadDropzone<OurFileRouter>
                                     endpoint="imageUploader"
-                                    onClientUploadComplete={(res) => {
+                                    onClientUploadComplete={async (res) => {
                                         // Do something with the response
+                                        await contentUpload({
+                                            user_id: userId!,
+                                            file_url: res?.[0]?.fileUrl!,
+                                            file_key: res?.[0]?.fileKey!,
+                                            visible: true,
+                                            type: "image",
+                                            brand_id: brandId
+                                          });
                                         refetch()
                                         toast({
                                             title: "Upload Complete",

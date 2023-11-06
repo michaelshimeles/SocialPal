@@ -3,14 +3,14 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-const pillarDeleteSchema = z.object({
-  user_id: z.string().describe("user ID"),
-  pillar_id: z.string().describe("brand ID"),
-});
+// const pillarDeleteSchema = z.object({
+//   user_id: z.string().describe("user ID"),
+//   pillar_id: z.string().describe("brand ID"),
+// });
 
-type pillarDeleteProps = z.infer<typeof pillarDeleteSchema>;
+// type pillarDeleteProps = z.infer<typeof pillarDeleteSchema>;
 
-export const deletePillars = async ( user_id: string, pillar_id: string) => {
+export const deletePillars = async (_user_id: string, pillar_id: string) => {
   const supabase = createServerComponentClient({ cookies });
 
   try {

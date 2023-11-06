@@ -1,35 +1,38 @@
 "use client"
+import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById"
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from "react"
 import LogoDashboard from "./logo/LogoDashboard"
 import MainDashboard from "./main/Main"
 import SheetDashboard from "./mobile/sheet"
 import NavigationDashboard from "./nav/Navigation"
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById"
-import { useGetBrands } from "@/utils/hooks/useGetBrands"
+import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
   const searchParams = useSearchParams()
-
   const search = searchParams.get('click')
-
-  // useEffect(() => {
-  //   const brandAuthorization = async () => {
-  //     try {
-  //       const { data, error } = await useGetBrands()
-
-  //       return data
-
-  //     } catch (error) {
-  //       return error
-  //     }
-  //   }
-  //   brandAuthorization()
-  // }, [])
-
   const pathname = usePathname()
-
   const brandId = pathname.split("/brand/")[1]
+  const router = useRouter()
+
+  useEffect(() => {
+    const authorizationCheck = async () => {
+      const response = await fetch("/api/auth/access", {
+        method: "POST",
+        body: JSON.stringify({
+          brandId
+        })
+      })
+
+      const result = await response.json()
+      if (!result) {
+        router.push('/brand')
+      }
+      return result
+    }
+
+    authorizationCheck()
+  }, [brandId])
 
   const { data, error, isLoading } = useGetBrandsById(brandId)
   return (

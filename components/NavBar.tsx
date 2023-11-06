@@ -25,7 +25,6 @@ export function NavBar() {
     const { user } = useUser();
     const { theme, systemTheme } = useTheme()
 
-
     return (
         <div className="flex min-w-full justify-between p-2 border-b z-10">
             <Dialog>
@@ -50,7 +49,6 @@ export function NavBar() {
                     </div>
                 </SheetContent>
             </Dialog>
-
             <NavigationMenu>
                 <NavigationMenuList className="max-[825px]:hidden ">
                     <Link href="/">
@@ -72,7 +70,6 @@ export function NavBar() {
                 </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center gap-3">
-
                 {user ?
                     <div className="flex items-center gap-3">
                         {theme === "dark" ?
