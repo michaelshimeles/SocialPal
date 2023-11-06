@@ -84,7 +84,7 @@ const Scheduler = () => {
                                             visible: true,
                                             type: "image",
                                             brand_id: brandId
-                                          });
+                                        });
                                         refetch()
                                         toast({
                                             title: "Upload Complete",
@@ -107,9 +107,16 @@ const Scheduler = () => {
                             <TabsContent value="video">
                                 <UploadDropzone<OurFileRouter>
                                     endpoint="videoUploader"
-                                    onClientUploadComplete={(res) => {
+                                    onClientUploadComplete={async (res) => {
                                         // Do something with the response
-                                        console.log("Files: ", res);
+                                        await contentUpload({
+                                            user_id: userId!,
+                                            file_url: res?.[0]?.fileUrl!,
+                                            file_key: res?.[0]?.fileKey!,
+                                            visible: true,
+                                            type: "image",
+                                            brand_id: brandId
+                                        });
                                         refetch()
                                         toast({
                                             title: "Upload Complete",
