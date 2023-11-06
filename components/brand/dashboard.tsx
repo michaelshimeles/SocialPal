@@ -13,19 +13,19 @@ export default function Dashboard() {
 
   const search = searchParams.get('click')
 
-  useEffect(() => {
-    const brandAuthorization = async () => {
-      try {
-        const { data, error } = await useGetBrands()
+  // useEffect(() => {
+  //   const brandAuthorization = async () => {
+  //     try {
+  //       const { data, error } = await useGetBrands()
 
-        return data
+  //       return data
 
-      } catch (error) {
-        return error
-      }
-    }
-    brandAuthorization()
-  }, [])
+  //     } catch (error) {
+  //       return error
+  //     }
+  //   }
+  //   brandAuthorization()
+  // }, [])
 
   const pathname = usePathname()
 

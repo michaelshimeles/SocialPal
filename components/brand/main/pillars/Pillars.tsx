@@ -132,10 +132,10 @@ const Pillars = ({ }) => {
                 </DialogContent>
             </Dialog>
             <div className="flex flex-wrap gap-3 mt-4">
-                {contentPillar?.map((info: any) => {
+                {contentPillar?.map((info: any, index: number) => {
                     console.log("info", info)
                     return (
-                        <div>
+                        <div key={index}>
                             <PillarCard title={"Content Pillar"} description={info?.content} pillar={info?.pillar_id} refetch={refetch} handlePillarInfo={handlePillarInfo} setShowPillar={setShowPillar}/>
                         </div>)
                 })}

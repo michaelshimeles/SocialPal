@@ -1,6 +1,6 @@
 "use client"
-import { BrandCreate } from '@/components/dashboard/brand/add-brand';
-import { SelectBrand } from '@/components/dashboard/brand/select-brand';
+import { BrandCreate } from '@/components/brand/select/add-brand';
+import { SelectBrand } from '@/components/brand/select/select-brand';
 
 const DashboardPage = ({ }) => {
     return (
