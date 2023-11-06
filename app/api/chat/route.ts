@@ -28,7 +28,7 @@ export async function POST(req: Request) {
 
     // Request the OpenAI API for the response based on the prompt
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4-1106-preview",
       messages: [
         {
           role: "user",
