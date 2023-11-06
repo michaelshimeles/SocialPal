@@ -33,10 +33,13 @@ export const createPillars = async ({
       .select();
 
     if (error?.code) {
+      console.log("error")
       return error;
     }
 
+    console.log("data", data)
     return data;
+    
   } catch (error: any) {
     throw new Error(error.message);
   }

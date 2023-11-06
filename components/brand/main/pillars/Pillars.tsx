@@ -64,11 +64,12 @@ const Pillars = ({ }) => {
             })
             const result = await response.json()
 
+            console.log("Result", result)
             setLoading(false)
             setConfetti(true)
             setTimeout(() => {
                 setConfetti(false)
-            }, 3000)
+            }, 2000)
             setOpen(false)
             refetch()
             return result
