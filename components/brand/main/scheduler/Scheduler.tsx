@@ -114,7 +114,7 @@ const Scheduler = () => {
                                             file_url: res?.[0]?.fileUrl!,
                                             file_key: res?.[0]?.fileKey!,
                                             visible: true,
-                                            type: "image",
+                                            type: "video",
                                             brand_id: brandId
                                         });
                                         refetch()
