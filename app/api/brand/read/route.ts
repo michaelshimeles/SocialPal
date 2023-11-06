@@ -10,6 +10,6 @@ export async function GET() {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error: any) {
-    throw new Error(error.message);
+    return NextResponse.json(error, { status: 400 });
   }
 }
