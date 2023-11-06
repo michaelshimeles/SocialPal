@@ -1,6 +1,7 @@
 "use server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const contentUploadSchema = z.object({
@@ -45,6 +46,6 @@ export const contentUpload = async ({
 
     return data;
   } catch (error: any) {
-    throw new Error(error.message);
+    return error;
   }
 };

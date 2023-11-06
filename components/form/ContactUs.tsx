@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import { NextResponse } from "next/server"
 import { useRef } from 'react'
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -58,8 +59,8 @@ export default function ContactUs() {
             const result = await response.json()
 
             return result
-        } catch (error) {
-            throw new Error("Storing Emails in db Frontend Error", error as any);
+        } catch (error: any) {
+            return NextResponse.json({ message: error.message }, { status: 500 });
         }
 
     }

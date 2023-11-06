@@ -50,6 +50,6 @@ export const registerBrand = async ({
 
     return data;
   } catch (error: any) {
-    throw new Error(error.message);
+    return error
   }
 };

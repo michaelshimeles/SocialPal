@@ -136,18 +136,36 @@ const Pillars = ({ }) => {
                 {contentPillar?.map((info: any, index: number) => {
                     return (
                         <div key={index}>
-                            <PillarCard title={"Content Pillar"} description={info?.content} pillar={info?.pillar_id} refetch={refetch} handlePillarInfo={handlePillarInfo} setShowPillar={setShowPillar}/>
+                            <PillarCard title={"Content Pillar"} description={info?.content} pillar={info?.pillar_id} refetch={refetch} handlePillarInfo={handlePillarInfo} setShowPillar={setShowPillar} />
                         </div>)
                 })}
             </div>
             <div className="flex flex-col my-[2rem]">
                 {showPillar?.map((line: string, index: number) => (
                     // Check if the line is not empty to avoid adding extra space for empty lines
-                    line ? <p key={index}>{line}</p> : <br key={index} />
+                    line ? <p key={index}>{formatLine(line)}</p> : <br key={index} />
                 ))}
             </div>
         </div>
     );
 }
+
+function formatLine(line: string) {
+    // Split the line by "**", but keep the delimiter to re-insert it after splitting
+    const parts = line.split(/(\*\*.*?\*\*)/).filter(Boolean); // Filter out empty strings
+
+    return parts.map((part, index) => {
+        // Check if part is surrounded by "**", which indicates bold
+        if (part.startsWith('**') && part.endsWith('**')) {
+            // Remove the "**" and wrap the content with <span className="font-bold">
+            return <span key={index} className="font-bold">{part.slice(2, -2)}</span>;
+        } else {
+            // If it's not bold, return the part as is
+            return part;
+        }
+    });
+}
+
+
 
 export default Pillars;

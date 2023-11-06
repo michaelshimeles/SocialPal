@@ -23,6 +23,6 @@ export const readBrands = async ({ user_id }: readBrandProps) => {
     }
     return brands;
   } catch (error: any) {
-    throw new Error(error.message);
+    return error
   }
 };

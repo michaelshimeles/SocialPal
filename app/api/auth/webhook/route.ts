@@ -2,6 +2,7 @@ import { userCreate } from "@/server/db/userCreate";
 import { userUpdate } from "@/server/db/userUpdate";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 export async function POST(req: Request) {
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
         user_id: payload?.data?.id,
       });
     } catch (error: any) {
-      throw new Error(error.message);
+      return NextResponse.json({ message: error.message }, { status: 500 });
     }
   }
 
@@ -79,10 +80,9 @@ export async function POST(req: Request) {
         profile_image_url: payload?.data?.profile_image_url,
         user_id: payload?.data?.id,
       });
+    } catch (error: any) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
     }
-     catch (error: any) {
-    throw new Error(error.message);
-  }
   }
   return new Response("", { status: 201 });
 }

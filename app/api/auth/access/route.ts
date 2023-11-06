@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       .eq("brand_id", payload.brandId);
 
     if (error?.code) {
-      throw new Error("Unauthorized");
+      return NextResponse.json("Unathorized");
     }
     let result = Brands?.some(brand => brand.brand_id === payload.brandId);
 

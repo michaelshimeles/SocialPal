@@ -26,6 +26,6 @@ export const readContent = async ({ brand_id }: readContentProps) => {
     }
     return Content;
   } catch (error: any) {
-    throw new Error(error.message);
+    return error
   }
 };

@@ -24,6 +24,6 @@ export const readPillars = async ({ brand_id }: readPillarProps) => {
     }
     return pillars;
   } catch (error: any) {
-    throw new Error(error.message);
+    return error
   }
 };

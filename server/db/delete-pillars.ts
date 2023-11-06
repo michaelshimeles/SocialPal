@@ -25,6 +25,6 @@ export const deletePillars = async (_user_id: string, pillar_id: string) => {
 
     return;
   } catch (error: any) {
-    throw new Error(error.message);
+    return { message: error.message };
   }
 };

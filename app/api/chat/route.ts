@@ -47,10 +47,9 @@ export async function POST(req: Request) {
       4. Product Features: Exploring unique features and advantages of the products.
       5. Expertise Sharing: Tips, techniques, or industry insights.
       6. Recipes or Usage Ideas: For food-related or lifestyle products, share usage ideas or recipes.
-      7. Community and Events: Information on community involvement, events, or partnerships.
-      8. Seasonal Content: Posts relevant to the current or upcoming season.
-      9. Promotions: Details about special offers, sales, or promotions.
-      10. Customer Support: Information on support channels and service highlights.
+      7. Seasonal Content: Posts relevant to the current or upcoming season.
+
+      p.s Do not respond with markdown
       `,
         },
       ],
@@ -58,8 +57,8 @@ export async function POST(req: Request) {
 
     await createPillars({
       user_id: userId!,
-      brand_id: brandId!,
-      content: response?.choices?.[0]?.message?.content!,
+      brand_id: brandId,
+      content: response?.choices?.[0]?.message?.content,
     });
 
     return NextResponse.json(response, { status: 200 });

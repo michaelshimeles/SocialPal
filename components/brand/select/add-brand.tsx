@@ -42,7 +42,7 @@ export function BrandCreate() {
       reset()
       return result
     } catch (error: any) {
-      throw new Error(error.message)
+      return error;
     }
   }
 
