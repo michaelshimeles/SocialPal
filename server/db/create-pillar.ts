@@ -2,36 +2,32 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
-const contentUploadSchema = z.object({
+const pillarCreateSchema = z.object({
   user_id: z.string().describe("user ID"),
-  file_url: z.string().url({ message: "Invalid URL" }),
-  file_key: z.string().describe("file key"),
-  visible: z.boolean(),
-  type: z.enum(["video", "image"]),
+  brand_id: z.string().describe("brand ID"),
+  content: z.any(),
 });
 
-type contentUploadProps = z.infer<typeof contentUploadSchema>;
+type pillarCreateProps = z.infer<typeof pillarCreateSchema>;
 
-export const contentUpload = async ({
+export const createPillars = async ({
   user_id,
-  file_url,
-  file_key,
-  visible,
-  type
-}: contentUploadProps) => {
+  brand_id,
+  content,
+}: pillarCreateProps) => {
   const supabase = createServerComponentClient({ cookies });
 
   try {
     const { data, error } = await supabase
-      .from("Content")
+      .from("Pillars")
       .insert([
         {
+          pillar_id: uuidv4(),
           user_id,
-          file_url,
-          file_key,
-          visible,
-          type,
+          brand_id,
+          content,
         },
       ])
       .select();

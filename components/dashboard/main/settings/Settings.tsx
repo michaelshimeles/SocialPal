@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Instagram, Clapperboard } from 'lucide-react';
+import { CreateOrganization, OrganizationProfile, OrganizationList } from "@clerk/nextjs";
 
 const SettingsDashboard = ({ }) => {
 
@@ -20,6 +21,10 @@ const SettingsDashboard = ({ }) => {
                     <Instagram />
                     Connect Instagram
                 </Button>
+            </div>
+            <div className='flex flex-col gap-5'>
+                {/* <CreateOrganization /> */}
+                <OrganizationProfile routing='path' path="/organization-profile" />
             </div>
         </div>
     );

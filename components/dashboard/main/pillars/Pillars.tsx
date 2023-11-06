@@ -18,19 +18,25 @@ import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById";
 import { useGetContentPillars } from "@/utils/hooks/useGetContentPillars";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { boolean } from "zod";
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
+import { Separator } from "@/components/ui/separator";
+import PillarCard from "@/components/card/PillarCard";
 
 const Pillars = ({ }) => {
     const pathname = usePathname()
+    const { width, height } = useWindowSize()
 
     const brandId = pathname.split("/brand/")[1]
     const [loading, setLoading] = useState<boolean>(false)
-    const [content, setContent] = useState<any>(null)
-
+    const [open, setOpen] = useState<boolean>(false)
+    const [confetti, setConfetti] = useState<boolean>(false)
+    const [showPillar, setShowPillar] = useState<any>(null)
     const { data, error } = useGetBrandsById(brandId)
-    const { data: contentPillar, error: contentPillarError } = useGetContentPillars(brandId)
+    const { data: contentPillar, error: contentPillarError, refetch } = useGetContentPillars(brandId)
 
     const {
         register,
@@ -40,60 +46,50 @@ const Pillars = ({ }) => {
         reset
     } = useForm()
 
+    function handlePillarInfo(content: any): void {
+        const contentLines = content.split('\n');
+
+        setShowPillar(contentLines)
+    }
+
     const onSubmit = async (data: any) => {
         setLoading(true)
         try {
             const response = await fetch("/api/chat", {
                 method: "POST",
                 body: JSON.stringify({
-                    "messages": [
-                        {
-                            role: "user",
-                            content: `
-                      - Brand Name: [${data?.name}]
-                      - Tone: [${data?.tone}]
-                      - Industry/Description: [${data?.description}]
-                      - Posting Schedule: [${data?.schedule}]
-                      - Types of Content: [${data?.assets}]
-                      
-                      With this information, we will develop content pillars and a monthly content plan that includes:
-                      
-                      1. Educational Posts: Information about products/services, how-to guides, and care instructions.
-                      2. User-Generated Content Highlight: Showcasing customer stories, reviews, or images.
-                      3. Brand Story: Insights into the company's history, mission, and values.
-                      4. Product Features: Exploring unique features and advantages of the products.
-                      5. Expertise Sharing: Tips, techniques, or industry insights.
-                      6. Recipes or Usage Ideas: For food-related or lifestyle products, share usage ideas or recipes.
-                      7. Community and Events: Information on community involvement, events, or partnerships.
-                      8. Seasonal Content: Posts relevant to the current or upcoming season.
-                      9. Promotions: Details about special offers, sales, or promotions.
-                      10. Customer Support: Information on support channels and service highlights.
-                      `,
-                        },
-                    ]
+                    data,
+                    brandId
                 })
             })
             const result = await response.json()
-            setContent(result)
+
             setLoading(false)
+            setConfetti(true)
+            setTimeout(() => {
+                setConfetti(false)
+            }, 3000)
+            setOpen(false)
+            refetch()
             return result
         } catch (error: any) {
-            console.log("Error", error)
             setLoading(false)
             return error
         }
     }
 
-    console.log("content", contentPillar)
-
-    const contentLines = contentPillar?.[0]?.content.split('\n');
-
     return (
         <div className="flex flex-col">
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button>Create Content Pillars</Button>
-                </DialogTrigger>
+            {confetti && <Confetti
+                width={width}
+                height={height}
+            />}
+            <Dialog open={open} onOpenChange={setOpen}>
+                <div>
+                    <DialogTrigger asChild>
+                        <Button>Create Content Pillars</Button>
+                    </DialogTrigger>
+                </div>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Create Content Pillars</DialogTitle>
@@ -101,7 +97,7 @@ const Pillars = ({ }) => {
                             Social Pal&apos;s AI will generate content plan for your brand
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    {<form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-4 py-4">
                             <div className="flex flex-col items-start gap-4">
                                 <Label>Brand name</Label>
@@ -132,11 +128,20 @@ const Pillars = ({ }) => {
                             </Button>
                         }
 
-                    </form>
+                    </form>}
                 </DialogContent>
             </Dialog>
+            <div className="flex flex-wrap gap-3 mt-4">
+                {contentPillar?.map((info: any) => {
+                    console.log("info", info)
+                    return (
+                        <div>
+                            <PillarCard title={"Content Pillar"} description={info?.content} pillar={info?.pillar_id} refetch={refetch} handlePillarInfo={handlePillarInfo} setShowPillar={setShowPillar}/>
+                        </div>)
+                })}
+            </div>
             <div className="flex flex-col my-[2rem]">
-                {contentLines?.map((line: string, index: number) => (
+                {showPillar?.map((line: string, index: number) => (
                     // Check if the line is not empty to avoid adding extra space for empty lines
                     line ? <p key={index}>{line}</p> : <br key={index} />
                 ))}

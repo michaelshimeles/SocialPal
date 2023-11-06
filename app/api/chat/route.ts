@@ -3,6 +3,8 @@
 import OpenAI from "openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+import { createPillars } from "@/server/db/create-pillar";
 
 // Optional, but recommended: run on the edge runtime.
 // See https://vercel.com/docs/concepts/functions/edge-functions
@@ -15,11 +17,8 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     // Extract the `messages` from the body of the request
-    const { messages } = await req.json();
-
-    if (!Array.isArray(messages)) {
-      throw new Error('The "messages" field must be an array.');
-    }
+    const { data, brandId } = await req.json();
+    const { userId } = auth();
 
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
@@ -30,10 +29,40 @@ export async function POST(req: Request) {
     // Request the OpenAI API for the response based on the prompt
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages,
+      messages: [
+        {
+          role: "user",
+          content: `
+      - Brand Name: [${data?.name}]
+      - Tone: [${data?.tone}]
+      - Industry/Description: [${data?.description}]
+      - Posting Schedule: [${data?.schedule}]
+      - Types of Content: [${data?.assets}]
+      
+      With this information, we will develop content pillars and a monthly content plan that includes:
+      
+      1. Educational Posts: Information about products/services, how-to guides, and care instructions.
+      2. User-Generated Content Highlight: Showcasing customer stories, reviews, or images.
+      3. Brand Story: Insights into the company's history, mission, and values.
+      4. Product Features: Exploring unique features and advantages of the products.
+      5. Expertise Sharing: Tips, techniques, or industry insights.
+      6. Recipes or Usage Ideas: For food-related or lifestyle products, share usage ideas or recipes.
+      7. Community and Events: Information on community involvement, events, or partnerships.
+      8. Seasonal Content: Posts relevant to the current or upcoming season.
+      9. Promotions: Details about special offers, sales, or promotions.
+      10. Customer Support: Information on support channels and service highlights.
+      `,
+        },
+      ],
     });
 
-    // Respond with JSON
+
+    await createPillars({
+      user_id: userId!,
+      brand_id: brandId!,
+      content: response?.choices?.[0]?.message?.content!,
+    });
+
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("Error:", error);

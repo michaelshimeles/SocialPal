@@ -7,7 +7,7 @@ import {
     navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { useAuth } from "@clerk/nextjs"
+import { OrganizationSwitcher, useAuth } from "@clerk/nextjs"
 import { Dialog, DialogClose } from "@radix-ui/react-dialog"
 import Link from "next/link"
 import * as React from "react"
@@ -17,10 +17,13 @@ import { Button } from "./ui/button"
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
 import { Profile } from "./Profile"
 import { useUser } from "@clerk/nextjs";
+import { dark } from '@clerk/themes';
+import { useTheme } from "next-themes"
 
 
 export function NavBar() {
     const { user } = useUser();
+    const { theme, systemTheme } = useTheme()
 
 
     return (
@@ -31,10 +34,7 @@ export function NavBar() {
                 </SheetTrigger>
                 <SheetContent side="left">
                     <SheetHeader>
-                        <SheetTitle>Nextjs Start Template</SheetTitle>
-                        <SheetDescription>
-                            Plan, Build & Scale.
-                        </SheetDescription>
+                        <SheetTitle>Social Pal</SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col space-y-3 mt-[1rem]">
                         <DialogClose asChild>
@@ -43,8 +43,8 @@ export function NavBar() {
                             </Link>
                         </DialogClose>
                         <DialogClose asChild>
-                            <Link href="/contact-us">
-                                <Button variant="outline" className="w-full">Contact Us</Button>
+                            <Link href="/brand">
+                                <Button variant="outline" className="w-full">Brand</Button>
                             </Link>
                         </DialogClose>
                     </div>
@@ -72,7 +72,34 @@ export function NavBar() {
                 </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center gap-3">
-                {user && <Profile />}
+
+                {user ?
+                    <div className="flex items-center gap-3">
+                        {theme === "dark" ?
+                            <div className="flex gap-3 pt-1">
+                                <OrganizationSwitcher appearance={{
+                                    baseTheme: dark,
+                                }} />
+                            </div>
+                            :
+                            <div className="flex gap-3 pt-1">
+                                <OrganizationSwitcher />
+                            </div>
+                        }
+                        <Profile />
+                    </div>
+                    : <>
+                        <Link href="/sign-up">
+                            <Button variant="outline">
+                                Signup
+                            </Button>
+                        </Link>
+                        <Link href="/sign-in">
+                            <Button>
+                                Login
+                            </Button>
+                        </Link>
+                    </>}
                 <ModeToggle />
             </div>
         </div>

@@ -40,8 +40,6 @@ const Scheduler = () => {
         selected: boolean
     } | null>(null)
 
-    console.log("date", date)
-
     const { data: content, error, isLoading, refetch } = useGetContent()
 
     return (
@@ -71,7 +69,6 @@ const Scheduler = () => {
                                     endpoint="imageUploader"
                                     onClientUploadComplete={(res) => {
                                         // Do something with the response
-                                        console.log("Res", res)
                                         refetch()
                                         toast({
                                             title: "Upload Complete",
@@ -79,7 +76,6 @@ const Scheduler = () => {
                                         setOpen(false)
                                     }}
                                     onUploadError={(error: Error) => {
-                                        console.log("Failed", error)
                                         toast({
                                             title: "Upload Failed",
                                             description: error.message,
