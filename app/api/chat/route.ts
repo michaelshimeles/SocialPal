@@ -56,7 +56,6 @@ export async function POST(req: Request) {
       ],
     });
 
-
     await createPillars({
       user_id: userId!,
       brand_id: brandId!,
@@ -64,9 +63,9 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(response, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", error);
   }
 
   // Convert the response into a friendly text-stream
