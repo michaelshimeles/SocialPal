@@ -55,12 +55,6 @@ export async function POST(req: Request) {
       ],
     });
 
-    await createPillars({
-      user_id: userId!,
-      brand_id: brandId,
-      content: response?.choices?.[0]?.message?.content,
-    });
-
     return NextResponse.json(response, { status: 200 });
   } catch (error: any) {
     console.error("Error:", error);

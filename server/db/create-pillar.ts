@@ -37,6 +37,10 @@ export const createPillars = async ({
       return error;
     }
 
+    if (data === null) {
+      return error
+    }
+
     console.log("data", data)
     return data;
     

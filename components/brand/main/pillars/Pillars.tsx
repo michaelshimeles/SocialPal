@@ -25,10 +25,13 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 import { Separator } from "@/components/ui/separator";
 import PillarCard from "@/components/card/PillarCard";
+import { createPillars } from "@/server/db/create-pillar";
+import { useAuth } from "@clerk/nextjs";
 
 const Pillars = ({ }) => {
     const pathname = usePathname()
     const { width, height } = useWindowSize()
+    const { userId } = useAuth();
 
     const brandId = pathname.split("/brand/")[1]
     const [loading, setLoading] = useState<boolean>(false)
@@ -65,6 +68,13 @@ const Pillars = ({ }) => {
             const result = await response.json()
 
             console.log("Result", result)
+
+            await createPillars({
+                user_id: userId!,
+                brand_id: brandId,
+                content: result,
+            });
+            
             setLoading(false)
             setConfetti(true)
             setTimeout(() => {
