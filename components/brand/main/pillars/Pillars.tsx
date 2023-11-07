@@ -72,9 +72,9 @@ const Pillars = ({ }) => {
             await createPillars({
                 user_id: userId!,
                 brand_id: brandId,
-                content: result,
+                content: result?.choices?.[0]?.message?.content,
             });
-            
+
             setLoading(false)
             setConfetti(true)
             setTimeout(() => {
