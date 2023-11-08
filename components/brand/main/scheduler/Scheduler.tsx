@@ -51,7 +51,7 @@ const Scheduler = () => {
     const { data: content, error, isLoading, refetch } = useGetContent(brandId)
 
     return (
-        <div className='flex flex-col items-start'>
+        <div className='flex flex-col items-start p-4 md:p-6'>
             <div className='flex space-x-3'>
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>

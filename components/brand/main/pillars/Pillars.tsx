@@ -1,32 +1,27 @@
 "use client"
-
+import PillarCard from "@/components/card/PillarCard";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+    DialogTrigger
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { createPillars } from "@/server/db/create-pillar";
 import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById";
 import { useGetContentPillars } from "@/utils/hooks/useGetContentPillars";
+import { useAuth } from "@clerk/nextjs";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Confetti from 'react-confetti';
 import { useForm } from "react-hook-form";
-import { boolean } from "zod";
-import useWindowSize from 'react-use/lib/useWindowSize'
-import Confetti from 'react-confetti'
-import { Separator } from "@/components/ui/separator";
-import PillarCard from "@/components/card/PillarCard";
-import { createPillars } from "@/server/db/create-pillar";
-import { useAuth } from "@clerk/nextjs";
+import useWindowSize from 'react-use/lib/useWindowSize';
 
 const Pillars = ({ }) => {
     const pathname = usePathname()
@@ -90,7 +85,7 @@ const Pillars = ({ }) => {
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col p-4 md:p-6">
             {confetti && <Confetti
                 width={width}
                 height={height}
