@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
 import { DialogClose } from "@radix-ui/react-dialog"
+
 interface PillarCardProps {
     title: string,
     description: string,
@@ -28,7 +29,6 @@ const PillarCard: React.FC<PillarCardProps> = ({ title, description, pillar, ref
                     pillar_id: pillar
                 })
             })
-            // refetch pillars
             refetch()
             setShowPillar(null)
 
@@ -48,7 +48,7 @@ const PillarCard: React.FC<PillarCardProps> = ({ title, description, pillar, ref
                         className="h-6 w-6"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke="currentColor"
+                        stroke="white"
                     >
                         <path d="M12 14l9-5-9-5-9 5 9 5z" />
                         <path

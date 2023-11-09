@@ -133,7 +133,6 @@ const Pillars = ({ }) => {
                                 Generating...
                             </Button>
                         }
-
                     </form>}
                 </DialogContent>
             </Dialog>
