@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         name: name,
         tools: [{ type: "code_interpreter" }, { type: "retrieval" }, ],
         model: "gpt-4",
-        file_ids: [""],
+        // file_ids: [],
       }
     );
 

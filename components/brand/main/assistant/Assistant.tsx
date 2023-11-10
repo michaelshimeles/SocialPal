@@ -114,7 +114,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
         return threadData?.body?.data.map((message: any, index: number) => {
             const isUserMessage = message.role === 'user';
             return (
-                <div className='flex justify-center'>
+                <div className='flex justify-center' key={index}>
                     {!threadLoading ? <div key={index} className='border rounded-md p-3 m-3 w-[50%]' style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
                         {isUserMessage ? <p style={{ textAlign: "left" }} className='text-blue-500'>{message.content[0].text.value}</p> : <p style={{ textAlign: "left" }}>{message.content[0].text.value}</p>}
                     </div> :
