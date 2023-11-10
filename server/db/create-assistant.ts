@@ -5,6 +5,7 @@ import { z } from "zod";
 
 const createAssistantSchema = z.object({
   name: z.string(),
+  instructions: z.string(),
   user_id: z.string().describe("user ID"),
   brand_id: z.string().describe("brand ID"),
   assistant_id: z.string().describe("assistant ID"),
@@ -16,6 +17,7 @@ type createAssistantProps = z.infer<typeof createAssistantSchema>;
 
 export const createAssistant = async ({
   name,
+  instructions,
   user_id,
   assistant_id,
   brand_id,
@@ -30,6 +32,7 @@ export const createAssistant = async ({
       .insert([
         {
           name,
+          instructions,
           user_id,
           assistant_id,
           brand_id,

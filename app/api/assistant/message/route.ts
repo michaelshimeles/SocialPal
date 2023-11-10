@@ -8,8 +8,8 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    // Extract the `messages` from the body of the request
-    const { assistantId } = await req.json();
+    // Extract the `threadId` from the body of the request
+    const { threadId } = await req.json();
     const { userId } = auth();
 
     if (!userId) {
@@ -22,10 +22,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Request the OpenAI API for the response based on the prompt
-    const myAssistant = await openai.beta.assistants.retrieve(assistantId);
+    const messages = await openai.beta.threads.messages.list(threadId);
 
-    return NextResponse.json(myAssistant, { status: 200 });
+    return NextResponse.json(messages, { status: 200 });
   } catch (error: any) {
     console.error("Error:", error);
     return NextResponse.json("Internal Server Error", error);

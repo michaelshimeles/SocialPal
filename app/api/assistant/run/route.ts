@@ -9,12 +9,8 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     // Extract the `messages` from the body of the request
-    const { assistantId } = await req.json();
+    const { assistantId, threadId, dialogue } = await req.json();
     const { userId } = auth();
-
-    if (!userId) {
-      throw new Error("Unauthorized.");
-    }
 
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
@@ -22,10 +18,21 @@ export async function POST(req: Request) {
       );
     }
 
-    // Request the OpenAI API for the response based on the prompt
-    const myAssistant = await openai.beta.assistants.retrieve(assistantId);
+    const message = await openai.beta.threads.messages.create(threadId, {
+      role: "user",
+      content: dialogue,
+    });
 
-    return NextResponse.json(myAssistant, { status: 200 });
+    // Request the OpenAI API for the response based on the prompt
+    const run = await openai.beta.threads.runs.create(threadId, {
+      assistant_id: assistantId,
+    });
+
+    const runInfo = await openai.beta.threads.runs.retrieve(threadId, run.id);
+
+    // const messages = await openai.beta.threads.messages.list(threadId);
+
+    return NextResponse.json(runInfo, { status: 200 });
   } catch (error: any) {
     console.error("Error:", error);
     return NextResponse.json("Internal Server Error", error);

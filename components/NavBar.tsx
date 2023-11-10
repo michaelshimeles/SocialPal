@@ -6,24 +6,25 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
+import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
-import { OrganizationSwitcher, useAuth } from "@clerk/nextjs"
+import { OrganizationSwitcher, useUser } from "@clerk/nextjs"
+import { dark } from '@clerk/themes'
 import { Dialog, DialogClose } from "@radix-ui/react-dialog"
+import { useTheme } from "next-themes"
 import Link from "next/link"
 import * as React from "react"
+import { Suspense } from "react"
 import { GiHamburgerMenu } from "react-icons/gi"
 import { ModeToggle } from "./ModeToggle"
-import { Button } from "./ui/button"
-import { SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
 import { Profile } from "./Profile"
-import { useUser } from "@clerk/nextjs";
-import { dark } from '@clerk/themes';
-import { useTheme } from "next-themes"
+import { Button } from "./ui/button"
+import { SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"
 
 
 export function NavBar() {
     const { user } = useUser();
-    const { theme, systemTheme } = useTheme()
+    const { theme } = useTheme()
 
     return (
         <div className="flex min-w-full justify-between p-2 border-b z-10">
@@ -69,36 +70,46 @@ export function NavBar() {
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
-            <div className="flex items-center gap-3">
-                {user ?
-                    <div className="flex items-center gap-3">
-                        {theme === "dark" ?
-                            <div className="flex gap-3 pt-1">
-                                <OrganizationSwitcher appearance={{
-                                    baseTheme: dark,
-                                }} />
-                            </div>
-                            :
-                            <div className="flex gap-3 pt-1">
-                                <OrganizationSwitcher />
-                            </div>
-                        }
-                        <Profile />
+            <Suspense fallback={
+                <div className="flex items-center space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
                     </div>
-                    : <>
-                        <Link href="/sign-up">
-                            <Button variant="outline">
-                                Signup
-                            </Button>
-                        </Link>
-                        <Link href="/sign-in">
-                            <Button>
-                                Login
-                            </Button>
-                        </Link>
-                    </>}
-                <ModeToggle />
-            </div>
+                </div>
+            }>
+                <div className="flex items-center gap-3">
+                    {user ?
+                        <div className="flex items-center gap-3">
+                            {theme === "dark" ?
+                                <div className="flex gap-3 pt-1">
+                                    <OrganizationSwitcher appearance={{
+                                        baseTheme: dark,
+                                    }} />
+                                </div>
+                                :
+                                <div className="flex gap-3 pt-1">
+                                    <OrganizationSwitcher />
+                                </div>
+                            }
+                            <Profile />
+                        </div>
+                        : <>
+                            <Link href="/sign-up">
+                                <Button variant="outline">
+                                    Signup
+                                </Button>
+                            </Link>
+                            <Link href="/sign-in">
+                                <Button>
+                                    Login
+                                </Button>
+                            </Link>
+                        </>}
+                    <ModeToggle />
+                </div>
+            </Suspense>
         </div>
 
     )

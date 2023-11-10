@@ -8,9 +8,13 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    // Extract the `messages` from the body of the request
+    // Extract the `name, instructions` from the body of the request
     const { name, instructions } = await req.json();
     const { userId } = auth();
+
+    if (!userId) {
+      throw new Error("Unauthorized.");
+    }
 
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
@@ -22,7 +26,7 @@ export async function POST(req: Request) {
     const myAssistant = await openai.beta.assistants.create({
       name: name,
       instructions: instructions,
-      tools: [{ type: "code_interpreter" }],
+      tools: [{ type: "code_interpreter" }, { type: "retrieval" }],
       model: "gpt-4-1106-preview",
     });
 
@@ -30,7 +34,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ myAssistant, thread }, { status: 200 });
   } catch (error: any) {
-    console.error("Error:", error);
     return NextResponse.json("Internal Server Error", error);
   }
 }

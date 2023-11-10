@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    // Extract the `messages` from the body of the request
+    // Extract the `name, instructions` from the body of the request
     const { assistantId } = await req.json();
     const { userId } = auth();
 
@@ -23,11 +23,11 @@ export async function POST(req: Request) {
     }
 
     // Request the OpenAI API for the response based on the prompt
-    const myAssistant = await openai.beta.assistants.retrieve(assistantId);
+    const response = await openai.beta.assistants.del(assistantId);
 
-    return NextResponse.json(myAssistant, { status: 200 });
+    console.log("response", response)
+    return NextResponse.json(response, { status: 200 });
   } catch (error: any) {
-    console.error("Error:", error);
     return NextResponse.json("Internal Server Error", error);
   }
 }

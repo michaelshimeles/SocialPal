@@ -20,13 +20,13 @@ export async function POST(req: Request) {
 
     // Request the OpenAI API for the response based on the prompt
     const myUpdatedAssistant = await openai.beta.assistants.update(
-        assistantId,
+      assistantId,
       {
         instructions: instructions,
         name: name,
-        tools: [{ type: "retrieval" }],
+        tools: [{ type: "code_interpreter" }, { type: "retrieval" }, ],
         model: "gpt-4",
-        file_ids: ["file-abc123", "file-abc456"],
+        file_ids: [""],
       }
     );
 
