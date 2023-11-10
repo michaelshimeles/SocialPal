@@ -6,9 +6,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function GET(req: Request) {
+export async function POST() {
   try {
-    // Extract the `name, instructions` from the body of the request
     const { userId } = auth();
 
     if (!userId) {

@@ -28,18 +28,27 @@ import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { createAssistant } from '@/server/db/create-assistant';
 import { useAuth } from '@clerk/nextjs';
 import { useGetBrandsById } from '@/utils/hooks/useGetBrandsById';
+import { useGetThreads } from '@/utils/hooks/useGetThread';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Loader2 } from 'lucide-react';
 
 interface AssistantProps {
 
 }
 
+export const Icons = {
+    spinner: Loader2,
+};
+
+
 const Assistant: React.FC<AssistantProps> = ({ }) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [open, setOpen] = useState<boolean>(false)
-    const [value, setValue] = useState<string>("")
+    const [value, setValue] = useState<any>("")
     const pathname = usePathname()
     const brandId = pathname.split("/brand/")[1]
     const { userId } = useAuth();
+
 
     const {
         register,
@@ -47,6 +56,14 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
         watch,
         formState: { errors },
         reset
+    } = useForm()
+
+    const {
+        register: assistantRegister,
+        handleSubmit: assistantHandleSubmit,
+        watch: assistantWatch,
+        formState: { errors: assistantError },
+        reset: assistantReset
     } = useForm()
 
     const onSubmit = async (data: any) => {
@@ -60,7 +77,6 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
 
         const result = await response?.json()
 
-        console.log("result", result)
         await createAssistant({
             name: result?.myAssistant?.name,
             instructions: result?.myAssistant?.instructions,
@@ -74,9 +90,42 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
         refetch()
     }
 
+    const onAssistantHandle = async (data: any) => {
+        const response = await fetch("/api/assistant/run", {
+            method: "POST",
+            body: JSON.stringify({
+                assistantId: value?.assistant_id,
+                threadId: value?.thread_id,
+                dialogue: data?.dialogue,
+            })
+        })
+
+        const result = await response.json()
+        threadRefetch()
+        return result
+    }
+
     const { data: assistantData, error, refetch } = useGetAssistants(brandId)
     const { data: brandData, error: brandError } = useGetBrandsById(brandId)
+    const { data: threadData, error: threadError, refetch: threadRefetch, isLoading: threadLoading } = useGetThreads(value.thread_id)
 
+    threadRefetch()
+    const renderMessages = (threadData: any) => {
+        return threadData?.body?.data.map((message: any, index: number) => {
+            const isUserMessage = message.role === 'user';
+            return (
+                <div className='flex justify-center'>
+                    {!threadLoading ? <div key={index} className='border rounded-md p-3 m-3 w-[50%]' style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
+                        {isUserMessage ? <p style={{ textAlign: "left" }} className='text-blue-500'>{message.content[0].text.value}</p> : <p style={{ textAlign: "left" }}>{message.content[0].text.value}</p>}
+                    </div> :
+                        <Icons.spinner className="h-4 w-4 animate-spin" />
+                    }
+                </div>
+            );
+        });
+    };
+
+    console.log("threadData", threadData?.body?.data)
     return (
         <div className="flex flex-col w-[100%] min-h-[88vh] overflow-hidden">
             <div className="flex flex-1 overflow-y-scroll p-4 space-x-2">
@@ -141,7 +190,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                             className="w-[200px] justify-between"
                         >
                             {value
-                                ? value
+                                ? value?.name
                                 : "Select Assistant..."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -154,9 +203,10 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                                 {assistantData?.map((info: any) => (
                                     <CommandItem
                                         key={info.assistant_id}
-                                        value={info.name}
+                                        value={info}
                                         onSelect={(currentValue) => {
-                                            setValue(currentValue === info?.name ? "" : currentValue)
+                                            threadRefetch()
+                                            setValue(currentValue === info?.name ? "" : info)
                                             setOpen(false)
                                         }}
                                     >
@@ -175,8 +225,9 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                 </Popover>
             </div>
             <div className="flex flex-col gap-1">
-                <form className="flex items-center gap-2 p-2 border-t">
-                    <Input className="flex-grow" placeholder="Type a message" />
+                {renderMessages(threadData)}
+                <form onSubmit={assistantHandleSubmit(onAssistantHandle)} className="flex items-center gap-2 p-2 border-t">
+                    <Input {...assistantRegister("dialogue", { required: true })} className="flex-grow" placeholder="Type a message" />
                     <Button>Send</Button>
                 </form>
             </div>

@@ -13,7 +13,7 @@ async function fetchAssistants(brand_id: string) {
 
 export const useGetAssistants = (brand_id: string) => {
     return useQuery({
-        queryKey: ["get-assistants"],
+        queryKey: ["get-assistants", brand_id],
         queryFn: () => fetchAssistants(brand_id),
     });
 };

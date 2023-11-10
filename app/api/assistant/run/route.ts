@@ -30,8 +30,6 @@ export async function POST(req: Request) {
 
     const runInfo = await openai.beta.threads.runs.retrieve(threadId, run.id);
 
-    // const messages = await openai.beta.threads.messages.list(threadId);
-
     return NextResponse.json(runInfo, { status: 200 });
   } catch (error: any) {
     console.error("Error:", error);
