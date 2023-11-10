@@ -6,8 +6,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { createPillars } from "@/server/db/create-pillar";
 
-// Optional, but recommended: run on the edge runtime.
-// See https://vercel.com/docs/concepts/functions/edge-functions
 export const runtime = "edge";
 
 const openai = new OpenAI({

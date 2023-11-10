@@ -1,12 +1,31 @@
 "use client"
+import { OurFileRouter } from '@/app/api/uploadthing/core'
+import { Textarea } from "@/components/ui/textarea"
 import { useGetBrandsById } from "@/utils/hooks/useGetBrandsById"
-import { usePathname, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect } from "react"
+import { UploadDropzone } from '@uploadthing/react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState } from "react"
+import { Button } from "../ui/button"
+import AssistantButton from "./assistant/AssistantButton"
 import LogoDashboard from "./logo/LogoDashboard"
 import MainDashboard from "./main/Main"
 import SheetDashboard from "./mobile/sheet"
 import NavigationDashboard from "./nav/Navigation"
-import { useRouter } from 'next/navigation'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { createAssistant } from "@/server/db/create-assistant"
+import { useForm } from "react-hook-form"
+import { useAuth } from "@clerk/nextjs";
 
 export default function Dashboard() {
   const searchParams = useSearchParams()
@@ -14,6 +33,16 @@ export default function Dashboard() {
   const pathname = usePathname()
   const brandId = pathname.split("/brand/")[1]
   const router = useRouter()
+  const [open, setOpen] = useState<boolean>(false)
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset
+  } = useForm()
+  const { userId } = useAuth();
 
   useEffect(() => {
     const authorizationCheck = async () => {
@@ -33,6 +62,32 @@ export default function Dashboard() {
 
     authorizationCheck()
   }, [brandId, router])
+
+
+  const onSubmit = async (data: any) => {
+    console.log("data", data)
+
+    const response = await fetch("/api/assistant/create", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data?.assistantName,
+        instrusctions: "",
+      })
+    })
+
+    const result = await response?.json()
+
+    console.log("result", result)
+
+    await createAssistant({
+      name: result?.myAssistant?.name,
+      user_id: userId!,
+      assistant_id: result?.myAssistant?.id,
+      brand_id: brandId,
+      thread_id: result?.thread?.id,
+      file_ids: result?.myAssistant?.file_ids,
+    })
+  }
 
   const { data, error, isLoading } = useGetBrandsById(brandId)
   return (
@@ -54,6 +109,62 @@ export default function Dashboard() {
           </Suspense>
           <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <p>Welcome, {data?.[0]?.name}</p>
+          </div>
+          <div className="flex space-x-3">
+            <Dialog open={open} onOpenChange={setOpen}>
+              <div>
+                <DialogTrigger asChild>
+                  <Button>Create</Button>
+                </DialogTrigger>
+              </div>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Create Brand Assistant</DialogTitle>
+                  <DialogDescription>
+                    Your Brand AI assistant
+                  </DialogDescription>
+                </DialogHeader>
+                {<form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-start gap-4">
+                      <Label>Assistant Name</Label>
+                      <Input {...register("assistantName", { required: true })}
+                        className="col-span-3" />
+                    </div>
+                    <div className="flex flex-col items-start gap-4">
+                      <Label>Brand Name</Label>
+                      <Input {...register("brandName", { required: true })} defaultValue={data?.[0]?.name} className="col-span-3" />
+                    </div>
+                    <div className="flex flex-col items-start gap-4">
+                      <Label>Brand description</Label>
+                      <Textarea {...register("description", { required: true })} id="username" defaultValue={data?.[0]?.description} className="col-span-3" />
+                    </div>
+                    <div>
+                      <Label>Brand Assets</Label>
+                      <UploadDropzone<OurFileRouter>
+                        endpoint="fileUploader"
+                        onClientUploadComplete={async (res) => {
+                          // Do something with the response
+                        }}
+                        onUploadError={(error: Error) => {
+                        }}
+                        onUploadBegin={(name) => {
+                          // Do something once upload begins
+                          console.log("Uploading: ", name);
+                        }}
+                      />
+
+                    </div>
+                  </div>
+                  <DialogClose asChild>
+                    <DialogFooter>
+                      <Button type='submit'>Confirm</Button>
+                    </DialogFooter>
+                  </DialogClose>                
+                  </form>}
+              </DialogContent>
+            </Dialog>
+            <AssistantButton />
           </div>
         </header>
         {search === null && <div className="flex flex-col p-6 mt-[8px]">

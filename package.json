@@ -44,7 +44,7 @@
     "next": "latest",
     "next-themes": "^0.2.1",
     "next-video": "^0.8.1",
-    "openai": "^4.14.2",
+    "openai": "^4.0.0",
     "react": "latest",
     "react-confetti": "^6.1.0",
     "react-countup": "^6.4.2",

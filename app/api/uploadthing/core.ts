@@ -40,6 +40,23 @@ export const ourFileRouter = {
       // This code RUNS ON YOUR SERVER after upload
 
     }),
+    fileUploader: f({
+      pdf: { maxFileSize: "256MB", maxFileCount: 10 },
+    })
+      .middleware(() => {
+        // This code runs on your server before upload
+        const { userId } = auth();
+  
+        // If you throw, the user will not be able to upload
+        if (!userId) throw new Error("Unauthorized");
+  
+        // Whatever is returned here is accessible in onUploadComplete as `metadata`
+        return { userId: userId };
+      })
+      .onUploadComplete(async ({ metadata, file }) => {
+        // This code RUNS ON YOUR SERVER after upload
+  
+      }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

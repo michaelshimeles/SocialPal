@@ -38,7 +38,7 @@ const Captions = () => {
                         toast({
                             title: "Captions are ready",
                         })
-                        
+
                         setShowCaptions(true)
                         setAIResult(result)
                         return result
@@ -63,7 +63,9 @@ const Captions = () => {
                         <AlertDialogHeader>
                             <AlertDialogTitle>Captions</AlertDialogTitle>
                             <AlertDialogDescription>
-                                    <p>{(aiResult?.choices?.[0]?.message?.content)}</p> 
+                                {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any) => {
+                                    return (<><p>{info}</p><br /></>)
+                                })}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
