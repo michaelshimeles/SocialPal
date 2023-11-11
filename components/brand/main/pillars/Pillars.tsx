@@ -62,8 +62,6 @@ const Pillars = ({ }) => {
             })
             const result = await response.json()
 
-            console.log("Result", result)
-
             await createPillars({
                 user_id: userId!,
                 brand_id: brandId,

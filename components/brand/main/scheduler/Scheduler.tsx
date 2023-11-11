@@ -10,10 +10,10 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
     Tabs,
     TabsContent,
@@ -22,17 +22,15 @@ import {
 } from "@/components/ui/tabs";
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
+import { contentUpload } from '@/server/db/contentUpload';
 import { useGetContent } from '@/utils/hooks/useGetContent';
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { useAuth } from '@clerk/nextjs';
 import { UploadDropzone } from "@uploadthing/react";
 import { Trash2, Upload } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
-import { PopoverClose } from '@radix-ui/react-popover';
-import { contentUpload } from '@/server/db/contentUpload';
-import { usePathname } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
 
 const Scheduler = () => {
     const pathname = usePathname()

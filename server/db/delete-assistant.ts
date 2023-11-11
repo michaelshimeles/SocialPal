@@ -2,14 +2,15 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export const deletePillars = async (_user_id: string, pillar_id: string) => {
+export const deleteAssistants = async (userId: string, assistantId: string) => {
   const supabase = createServerComponentClient({ cookies });
 
   try {
     const { error } = await supabase
-      .from("Pillars")
+      .from("Assistants")
       .delete()
-      .eq("pillar_id", pillar_id);
+      .eq("assistant_id", assistantId)
+      .eq("user_id", userId);
 
     if (error?.code) {
       return error;
