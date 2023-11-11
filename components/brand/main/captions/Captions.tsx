@@ -9,8 +9,6 @@ import { Button } from '@/components/ui/button';
 const Captions = () => {
     const [showCaptions, setShowCaptions] = useState<boolean>(false)
     const [aiResult, setAIResult] = useState<any>(null)
-
-    console.log("aiResult?.choices?.[0]?.message?.content", aiResult?.choices?.[0]?.message?.content)
     return (
         <div className='p-4 md:p-6'>
             <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -52,6 +50,9 @@ const Captions = () => {
                     }}
                     onUploadBegin={(name) => {
                         // Do something once upload begins
+                        toast({
+                            title: "Starting to cook 👨‍🍳🔥",
+                        })
                         console.log("Uploading: ", name);
                     }}
                 />

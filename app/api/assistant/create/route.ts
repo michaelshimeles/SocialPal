@@ -9,7 +9,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     // Extract the `name, instructions` from the body of the request
-    const { name, instructions } = await req.json();
+    const { name, instructions, files } = await req.json();
     const { userId } = auth();
 
     if (!userId) {
@@ -22,18 +22,24 @@ export async function POST(req: Request) {
       );
     }
 
+    console.log("files", files)
+
     // Request the OpenAI API for the response based on the prompt
     const myAssistant = await openai.beta.assistants.create({
       name: name,
       instructions: instructions,
       tools: [{ type: "code_interpreter" }, { type: "retrieval" }],
       model: "gpt-4-1106-preview",
+      file_ids: [files?.[0]?.id]
     });
+
+    console.log("myAssistant", myAssistant);
 
     const thread = await openai.beta.threads.create();
 
     return NextResponse.json({ myAssistant, thread }, { status: 200 });
   } catch (error: any) {
+    console.log("error", error);
     return NextResponse.json("Internal Server Error", error);
   }
 }

@@ -19,6 +19,7 @@ import { deleteAssistants } from '@/server/db/delete-assistant';
 const SettingsDashboard = ({ }) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [openDeleteAssistant, setOpenDeleteAssistant] = useState<boolean>(false)
+    const [files, setFiles] = useState<any>(null)
     const { userId } = useAuth();
     const pathname = usePathname()
     const brandId = pathname.split("/brand/")[1]
@@ -40,6 +41,7 @@ const SettingsDashboard = ({ }) => {
             body: JSON.stringify({
                 name: data?.assistantName,
                 instructions: data?.instructions,
+                files: files
             })
         })
 
@@ -118,12 +120,23 @@ const SettingsDashboard = ({ }) => {
                                     <Textarea {...register("instructions", { required: true })} id="instructions" defaultValue={brandData?.[0]?.description} className="col-span-3" />
                                 </div>
                                 <div>
-                                    <Label>Brand Assets</Label>
+                                    <Label>Any informational documents on the brand</Label>
                                     <UploadDropzone<OurFileRouter>
-                                        endpoint="imageUploader"
+                                        endpoint="fileUploader"
                                         onClientUploadComplete={async (res) => {
                                             // Do something with the response
-                                            console.log("res", res)
+                                            const response = await fetch("/api/assistant/file", {
+                                                method: "POST",
+                                                body: JSON.stringify({
+                                                    files: res
+                                                })
+                                            })
+
+                                            const result = await response?.json()
+
+                                            console.log("result", result)
+                                            setFiles(result)
+                                            return result
                                         }}
                                         onUploadError={(error: Error) => {
                                             console.log("error", error)
@@ -145,12 +158,10 @@ const SettingsDashboard = ({ }) => {
                         </form>}
                     </DialogContent>
                 </Dialog>
-                {!assistantData && <Dialog open={openDeleteAssistant} onOpenChange={setOpenDeleteAssistant}>
-                    <div>
-                        <DialogTrigger asChild>
-                            <Button variant="outline">Delete Assistant</Button>
-                        </DialogTrigger>
-                    </div>
+                {assistantData?.[0] && <Dialog open={openDeleteAssistant} onOpenChange={setOpenDeleteAssistant}>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">Delete Assistant</Button>
+                    </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle>Delete Assistant</DialogTitle>
@@ -163,14 +174,14 @@ const SettingsDashboard = ({ }) => {
                                 <div key={index} className='flex justify-between'>
                                     <p>{info?.name}</p>
                                     <div onClick={() => handleDeletingAssistant(info)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-trash-2"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash-2"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
                                     </div>
                                 </div>
                             ))}
                         </div>
                         <DialogClose asChild>
                             <DialogFooter>
-                                <Button type='submit'>Confirm</Button>
+                                <Button type='submit'>Done</Button>
                             </DialogFooter>
                         </DialogClose>
                     </DialogContent>

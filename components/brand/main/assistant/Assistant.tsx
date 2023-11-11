@@ -1,4 +1,5 @@
 "use client"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     Command,
@@ -16,12 +17,14 @@ import {
 import { cn } from "@/lib/utils";
 import { useGetAssistants } from '@/utils/hooks/useGetAssistants';
 import { useGetThreads } from '@/utils/hooks/useGetThread';
-import { useAuth } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Loader2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
+import breaks from 'remark-breaks';
 
 interface AssistantProps {
 
@@ -34,12 +37,18 @@ export const Icons = {
 
 const Assistant: React.FC<AssistantProps> = ({ }) => {
     const [open, setOpen] = useState<boolean>(false)
+    const [sendingLoading, setSendingLoading] = useState<boolean>(false)
     const [value, setValue] = useState<any>("")
     const pathname = usePathname()
     const brandId = pathname.split("/brand/")[1]
-    const { userId } = useAuth();
+    const { isLoaded, isSignedIn, user } = useUser();
 
-
+    window.onload = function() {
+        var element: any = document.getElementById("scrollable-container");
+        element.scrollTop = element?.scrollHeight;
+      };
+      
+    console.log("user", user?.imageUrl)
 
     const {
         register: assistantRegister,
@@ -50,6 +59,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     } = useForm()
 
     const onAssistantHandle = async (data: any) => {
+        setSendingLoading(true)
         const response = await fetch("/api/assistant/run", {
             method: "POST",
             body: JSON.stringify({
@@ -62,21 +72,40 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
 
         const result = await response.json()
         assistantReset()
+        setSendingLoading(false)
         return result
     }
 
     const { data: assistantData, error, refetch } = useGetAssistants(brandId)
-    const { data: threadData, error: threadError, refetch: threadRefetch, isLoading: threadLoading } = useGetThreads(value.thread_id)
+    const { data: threadData, error: threadError, refetch: threadRefetch, isLoading: threadLoading, isRefetching } = useGetThreads(value.thread_id)
 
-    threadRefetch()
     const renderMessages = (threadData: any) => {
-        return threadData?.body?.data.map((message: any, index: number) => {
+        const messages = threadData?.body?.data.slice().reverse();
+
+        return messages?.map((message: any, index: number) => {
             const isUserMessage = message.role === 'user';
             return (
-                <div className='flex justify-center' key={index}>
-                    {!threadLoading ? <div key={index} className='border rounded-md p-3 m-3 w-[50%]' style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
-                        {isUserMessage ? <p style={{ textAlign: "left" }} className='text-blue-500'>{message.content[0].text.value}</p> : <p style={{ textAlign: "left" }}>{message.content[0].text.value}</p>}
-                    </div> :
+                <div className='flex w-[100%] justify-end' key={index}>
+                    {!threadLoading ?
+                        <div key={index} style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
+                            {isUserMessage ?
+                                <div className='flex justify-center items-center'>
+                                    <Avatar>
+                                        <AvatarImage src={user?.imageUrl} alt="profile" />
+                                        <AvatarFallback>MS</AvatarFallback>
+                                    </Avatar>
+                                    <ReactMarkdown className='min-w-[470px max-w-[470px] text-left border rounded-md p-3 m-3' remarkPlugins={[breaks]} >{message.content[0].text.value}</ReactMarkdown>
+                                </div>
+                                :
+                                <div className='flex justify-start items-start p-3'>
+                                    <Avatar>
+                                        <AvatarImage src="/bridge.svg" alt="Assistant" />
+                                        {/* <AvatarFallback>CN</AvatarFallback> */}
+                                    </Avatar>
+                                    <ReactMarkdown className="w-[50%] border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>
+                                </div>
+                            }
+                        </div> :
                         <Icons.spinner className="h-4 w-4 animate-spin" />
                     }
                 </div>
@@ -85,8 +114,8 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     };
 
     return (
-        <div className="flex flex-col w-[100%] min-h-[88vh] overflow-hidden">
-            <div className="flex flex-1 overflow-y-scroll p-4 space-x-2">
+        <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">
+            <div className="flex flex-1 p-4 space-x-2">
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -106,7 +135,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                             <CommandInput placeholder="Search framework..." className="h-9" />
                             <CommandEmpty>No assistant found.</CommandEmpty>
                             <CommandGroup>
-                                {assistantData?.map((info: any) => (
+                                {assistantData?.length ? assistantData?.map((info: any) => (
                                     <CommandItem
                                         key={info.assistant_id}
                                         value={info}
@@ -124,17 +153,20 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                                             )}
                                         />
                                     </CommandItem>
-                                ))}
+                                )) : <CommandItem
+                                >
+                                    No Assistant Found
+                                </CommandItem>}
                             </CommandGroup>
                         </Command>
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex justify-center items-center flex-col gap-1">
                 {renderMessages(threadData)}
-                <form className="flex bg-black items-center gap-2 p-2 border-t" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
+                <form className="flex gap-2 p-2 w-[650px] border rounded-md" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
                     <Input {...assistantRegister("dialogue", { required: true })} className="flex-grow" placeholder="Type a message" />
-                    <Button type='submit'>Send</Button>
+                    <Button disabled={sendingLoading} type='submit'>{!sendingLoading ? "Send" : "Loading..."}</Button>
                 </form>
             </div>
         </div>
