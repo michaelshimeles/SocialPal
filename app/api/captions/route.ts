@@ -25,19 +25,7 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log('image_url', image_url)
-
-    const messageContent = JSON.stringify([
-      {
-        type: "text",
-        text: "You are InstagramGPT, an Instagram caption creator that receives an images and comes up with 5 captions for the image for me to post on Instagram, please take in consideration the image shared",
-      },
-      {
-        image_url: {
-          url: image_url
-        }
-      }
-    ]);
+    console.log("image_url", image_url);
 
     // Request the OpenAI API for the response based on the prompt
     const response = await openai.chat.completions.create({
@@ -45,10 +33,21 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "user",
-          content: messageContent,
+          content: [
+            {
+              type: "text",
+              text: "You are InstagramGPT, an Instagram caption creator that receives an images and comes up with 5 captions for the image for me to post on Instagram, please take in consideration the image shared",
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: image_url,
+              },
+            },
+          ],
         },
       ],
-      "max_tokens": 3000
+      max_tokens: 3000
     });
 
     console.log("response", response);
@@ -58,6 +57,4 @@ export async function POST(req: Request) {
     console.error("Error", error);
     return NextResponse.json(error);
   }
-
-
 }

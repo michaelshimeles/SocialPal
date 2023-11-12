@@ -21,7 +21,7 @@ import { useUser } from '@clerk/nextjs';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Loader2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ReactMarkdown from 'react-markdown';
 import breaks from 'remark-breaks';
@@ -43,13 +43,6 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     const brandId = pathname.split("/brand/")[1]
     const { isLoaded, isSignedIn, user } = useUser();
 
-    window.onload = function() {
-        var element: any = document.getElementById("scrollable-container");
-        element.scrollTop = element?.scrollHeight;
-      };
-      
-    console.log("user", user?.imageUrl)
-
     const {
         register: assistantRegister,
         handleSubmit: assistantHandleSubmit,
@@ -68,11 +61,11 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                 dialogue: data?.dialogue,
             })
         })
-        threadRefetch()
 
         const result = await response.json()
         assistantReset()
         setSendingLoading(false)
+        threadRefetch()
         return result
     }
 
@@ -85,24 +78,27 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
         return messages?.map((message: any, index: number) => {
             const isUserMessage = message.role === 'user';
             return (
-                <div className='flex w-[100%] justify-end' key={index}>
+                <div className='flex w-[100%]' key={index}>
                     {!threadLoading ?
-                        <div key={index} style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
+                        <div key={index} className='w-full' style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
                             {isUserMessage ?
-                                <div className='flex justify-center items-center'>
-                                    <Avatar>
-                                        <AvatarImage src={user?.imageUrl} alt="profile" />
-                                        <AvatarFallback>MS</AvatarFallback>
-                                    </Avatar>
-                                    <ReactMarkdown className='min-w-[470px max-w-[470px] text-left border rounded-md p-3 m-3' remarkPlugins={[breaks]} >{message.content[0].text.value}</ReactMarkdown>
+                                <div className='flex w-[100%] justify-end'>
+                                    <div className='flex justify-start items-start p-3'>
+                                        <ReactMarkdown className='min-w-[470px max-w-[470px] text-left border rounded-md p-3 mx-3' remarkPlugins={[breaks]} >{message.content[0].text.value}</ReactMarkdown>
+                                        <Avatar>
+                                            <AvatarImage src={user?.imageUrl} alt="profile" />
+                                        </Avatar>
+                                    </div>
                                 </div>
                                 :
-                                <div className='flex justify-start items-start p-3'>
-                                    <Avatar>
-                                        <AvatarImage src="/bridge.svg" alt="Assistant" />
-                                        {/* <AvatarFallback>CN</AvatarFallback> */}
-                                    </Avatar>
-                                    <ReactMarkdown className="w-[50%] border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>
+                                <div className='flex w-[100%] justify-start'>
+                                    <div className='flex justify-start items-start p-3'>
+                                        <Avatar>
+                                            <AvatarImage src="/bridge.svg" alt="Assistant" />
+                                            {/* <AvatarFallback>CN</AvatarFallback> */}
+                                        </Avatar>
+                                        <ReactMarkdown className="w-[50%] border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>
+                                    </div>
                                 </div>
                             }
                         </div> :
@@ -112,6 +108,10 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
             );
         });
     };
+
+    useEffect(() => {
+        threadRefetch()
+    }, [assistantData, threadData, sendingLoading])
 
     return (
         <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">

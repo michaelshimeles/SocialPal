@@ -15,14 +15,17 @@ import { useGetBrandsById } from '@/utils/hooks/useGetBrandsById';
 import { UploadDropzone } from '@uploadthing/react';
 import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { deleteAssistants } from '@/server/db/delete-assistant';
+import { useToast } from '@/components/ui/use-toast';
 
 const SettingsDashboard = ({ }) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const [openDeleteAssistant, setOpenDeleteAssistant] = useState<boolean>(false)
+    const [createAssistantLoading, setCreateAssistantLoading] = useState<boolean>(false)
+    const [deleteAssistantLoading, setDeleteAssistantLoading] = useState<boolean>(false)
     const [files, setFiles] = useState<any>(null)
     const { userId } = useAuth();
     const pathname = usePathname()
     const brandId = pathname.split("/brand/")[1]
+    const { toast } = useToast()
 
     const {
         register,
@@ -36,43 +39,76 @@ const SettingsDashboard = ({ }) => {
     const { data: brandData, error: brandError } = useGetBrandsById(brandId)
 
     const onSubmit = async (data: any) => {
-        const response = await fetch("/api/assistant/create", {
-            method: "POST",
-            body: JSON.stringify({
-                name: data?.assistantName,
-                instructions: data?.instructions,
-                files: files
+        try {
+            setCreateAssistantLoading(true)
+            const response = await fetch("/api/assistant/create", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: data?.assistantName,
+                    instructions: data?.instructions,
+                    files: files
+                })
             })
-        })
 
-        const result = await response?.json()
+            const result = await response?.json()
 
-        await createAssistant({
-            name: result?.myAssistant?.name,
-            instructions: result?.myAssistant?.instructions,
-            user_id: userId!,
-            assistant_id: result?.myAssistant?.id,
-            brand_id: brandId,
-            thread_id: result?.thread?.id,
-            file_ids: result?.myAssistant?.file_ids,
-        })
+            await createAssistant({
+                name: result?.myAssistant?.name,
+                instructions: result?.myAssistant?.instructions,
+                user_id: userId!,
+                assistant_id: result?.myAssistant?.id,
+                brand_id: brandId,
+                thread_id: result?.thread?.id,
+                file_ids: result?.myAssistant?.file_ids,
+            })
+            toast({
+                description: "Assistant has been created",
+            })
 
-        refetch()
+            refetch()
+            setCreateAssistantLoading(false)
+        } catch (error: any) {
+            toast({
+                title: "Failed to create assistant",
+                description: error?.message!,
+                variant: "destructive"
+            })
+            setCreateAssistantLoading(false)
+
+            return error
+        }
     }
 
     const handleDeletingAssistant = async (info: any) => {
-        const response = await fetch("/api/assistant/delete", {
-            method: "POST",
-            body: JSON.stringify({
-                assistantId: info?.assistant_id
+        try {
+            setDeleteAssistantLoading(true)
+            const response = await fetch("/api/assistant/delete", {
+                method: "POST",
+                body: JSON.stringify({
+                    assistantId: info?.assistant_id
+                })
             })
-        })
 
-        const result = await response.json()
-        await deleteAssistants(userId!, info?.assistant_id)
+            const result = await response.json()
+            await deleteAssistants(userId!, info?.assistant_id)
 
-        refetch()
-        return result
+            refetch()
+            setDeleteAssistantLoading(false)
+
+            toast({
+                description: "Assistant has been deleted",
+            })
+            return result
+        } catch (error: any) {
+            toast({
+                title: "Failed to delete assistant",
+                description: error?.message!,
+                variant: "destructive"
+            })
+
+            setDeleteAssistantLoading(false)
+            return error
+        }
     }
 
     return (
@@ -94,7 +130,7 @@ const SettingsDashboard = ({ }) => {
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <div>
                         <DialogTrigger asChild>
-                            <Button variant="outline">Create AI Assistant</Button>
+                            <Button disabled={createAssistantLoading} variant="outline">{!createAssistantLoading ? "Create AI Assistant" : "Loading..."}</Button>
                         </DialogTrigger>
                     </div>
                     <DialogContent className="sm:max-w-[425px]">
@@ -158,7 +194,7 @@ const SettingsDashboard = ({ }) => {
                         </form>}
                     </DialogContent>
                 </Dialog>
-                {assistantData?.[0] && <Dialog open={openDeleteAssistant} onOpenChange={setOpenDeleteAssistant}>
+                {assistantData?.[0] && <Dialog>
                     <DialogTrigger asChild>
                         <Button variant="outline">Delete Assistant</Button>
                     </DialogTrigger>
@@ -181,7 +217,7 @@ const SettingsDashboard = ({ }) => {
                         </div>
                         <DialogClose asChild>
                             <DialogFooter>
-                                <Button type='submit'>Done</Button>
+                                <Button disabled={deleteAssistantLoading}>{!deleteAssistantLoading ? "Done" : "Loading..."}</Button>
                             </DialogFooter>
                         </DialogClose>
                     </DialogContent>

@@ -5,10 +5,14 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, 
 import { UploadDropzone } from '@uploadthing/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 const Captions = () => {
     const [showCaptions, setShowCaptions] = useState<boolean>(false)
     const [aiResult, setAIResult] = useState<any>(null)
+    const [imageUrl, setImageUrl] = useState<any>(null)
+
+    console.log("aiResult", aiResult)
     return (
         <div className='p-4 md:p-6'>
             <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -29,14 +33,13 @@ const Captions = () => {
                             })
                         })
 
-                        console.log("response", response)
                         const result = await response.json()
 
-                        console.log("result", result)
                         toast({
                             title: "Captions are ready",
                         })
 
+                        setImageUrl(res?.[0]?.fileUrl)
                         setShowCaptions(true)
                         setAIResult(result)
                         return result
@@ -64,8 +67,11 @@ const Captions = () => {
                         <AlertDialogHeader>
                             <AlertDialogTitle>Captions</AlertDialogTitle>
                             <AlertDialogDescription>
+                                {/* <div className='flex justify-start pb-5'>
+                                    <Image src={imageUrl} className='rounded-sm' alt="Caption Image" width={200} height={50} />
+                                </div> */}
                                 {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any) => {
-                                    return (<><p>{info}</p><br /></>)
+                                    return (<div><p>{info}</p><br /></div>)
                                 })}
                             </AlertDialogDescription>
                         </AlertDialogHeader>

@@ -22,7 +22,15 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("files", files)
+    console.log("files", files);
+
+    let fileId;
+
+    if (!files) {
+      fileId = [];
+    } else {
+      fileId = [files?.[0]?.id];
+    }
 
     // Request the OpenAI API for the response based on the prompt
     const myAssistant = await openai.beta.assistants.create({
@@ -30,7 +38,7 @@ export async function POST(req: Request) {
       instructions: instructions,
       tools: [{ type: "code_interpreter" }, { type: "retrieval" }],
       model: "gpt-4-1106-preview",
-      file_ids: [files?.[0]?.id]
+      // file_ids: fileId,
     });
 
     console.log("myAssistant", myAssistant);

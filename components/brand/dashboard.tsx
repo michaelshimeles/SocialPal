@@ -47,7 +47,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex flex-col overflow-auto">
-        <header className="sticky top-0 flex min-h-[60px] items-center border-b bg-zinc-100/40 px-6 dark:bg-zinc-800/40">
+        <header className="sticky top-0 flex min-h-[60px] items-center border-b bg-white px-6 dark:bg-black z-10">
           <Suspense fallback={<svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>}>
             <SheetDashboard />
           </Suspense>
