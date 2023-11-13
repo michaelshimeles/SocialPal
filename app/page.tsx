@@ -1,13 +1,19 @@
 "use client"
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import Image from 'next/image'
 import { NavBar } from '@/components/NavBar'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import Link from 'next/link'
+
 export default function Home() {
   return (
     <main className="flex min-w-screen flex-col items-center justify-between">
       <NavBar />
       <div className='flex flex-col text-center mt-[5rem]'>
+        <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+          <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white ring-1 ring-gray-900/10 hover:ring-gray-900/20 bg-gradient-to-r from-violet-600 to-indigo-600">
+            A lot of features are on hold due to Tiktok & IG API approval taking forever.
+          </div>
+        </div>
         <div className='flex justify-center text-center space-x-3'>
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
             Hey Social Pal

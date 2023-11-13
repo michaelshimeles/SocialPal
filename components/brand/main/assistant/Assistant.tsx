@@ -178,9 +178,9 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
             <div className="flex justify-center items-center flex-col gap-1 pb-[13rem]" >
                 {renderMessages(threadData)}
                 <form className="flex flex-col gap-2 p-2 lg:min-w-[650px] md:min-w-[450px] mb-8 border bottom-8 fixed rounded-md bg-white" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
-                    <div className='flex gap-2 items-start'>
+                    {/* <div className='flex gap-2 items-start'>
                         <Button size="sm" variant="outline">Content Pillars</Button>
-                    </div>
+                    </div> */}
                     <div className='flex gap-2 w-full'>
                         <Input {...assistantRegister("dialogue", { required: true })} className="flex-grow" placeholder="Type a message" />
                         <Button disabled={sendingLoading} type='submit' variant="outline">{!sendingLoading ? "Send" : "Loading..."}</Button>

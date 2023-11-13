@@ -116,7 +116,7 @@ const SettingsDashboard = ({ }) => {
             <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                 Settings
             </h2>
-            <div className='flex space-x-2'>
+            {/* <div className='flex space-x-2'>
                 <Button className='flex gap-2'>
                     <Clapperboard />
                     Connect Tiktok
@@ -125,7 +125,7 @@ const SettingsDashboard = ({ }) => {
                     <Instagram />
                     Connect Instagram
                 </Button>
-            </div>
+            </div> */}
             <div className='flex gap-2'>
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <div>

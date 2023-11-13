@@ -60,6 +60,12 @@ export default function Dashboard() {
             How to use Social Pal
           </h2>
           <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
+            Assistant
+          </h3>
+          <p className="leading-7 [&:not(:first-child)]:mt-2">
+            A Social Media AI Assistant, the benefits are as follows:
+          </p>
+          <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
             Content Pillars
           </h3>
           <p className="leading-7 [&:not(:first-child)]:mt-2">
@@ -74,17 +80,23 @@ export default function Dashboard() {
             These content pillars will be the foundation on which you will create content to then schedule and post.
           </p>
           <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
+            Caption Generator
+          </h3>
+          <p className="leading-7 [&:not(:first-child)]:mt-2">
+            Get captions generated easily and quickly
+          </p>
+          {/* <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
             Scheduler
           </h3>
           <p className="leading-7 [&:not(:first-child)]:mt-2">
             Here you can upload content (images & videos) to your brands TikTok and/or Instagram account to then schedule to post.
-          </p>
-          <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
+          </p> */}
+          {/* <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
             Analytics
           </h3>
           <p className="leading-7 [&:not(:first-child)]:mt-2">
             Keep up with your brands social analytics. Track KPIs and analyze your brands growth with our easy to read analytics.
-          </p>
+          </p> */}
         </div>}
         <Suspense fallback={<svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>}>
           <MainDashboard />
