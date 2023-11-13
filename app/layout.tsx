@@ -10,13 +10,15 @@ import Provider from '@/utils/provider'
 import Script from 'next/script'
 const inter = Inter({ subsets: ['latin'] })
 
+
 export const metadata: Metadata = {
-  title: 'Social Pal',
-  description: 'Use Ai to ideate, plan, and schedule content 5x faster',
+  keywords: ['Social Pal', 'Social Pal AI', 'Hey Social Pal'],
+  openGraph: {
+    title: 'Social Pal',
+    description: 'An AI Social Media assistant design to help you grow your brands social',
+    images: ['/cover.png']
+  }
 }
-
-
-
 export default function RootLayout({
   children,
 }: {
