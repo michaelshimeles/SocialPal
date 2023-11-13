@@ -37,11 +37,12 @@ const Captions = () => {
 
                         toast({
                             title: "Captions are ready",
+                            description: "Your caption has been cooked!"
                         })
 
                         setImageUrl(res?.[0]?.fileUrl)
-                        setShowCaptions(true)
                         setAIResult(result)
+                        setShowCaptions(true)
                         return result
                     }}
                     onUploadError={(error: Error) => {
@@ -55,6 +56,7 @@ const Captions = () => {
                         // Do something once upload begins
                         toast({
                             title: "Starting to cook 👨‍🍳🔥",
+                            description: "Your caption is being cooked right now!"
                         })
                         console.log("Uploading: ", name);
                     }}
@@ -67,12 +69,14 @@ const Captions = () => {
                         <AlertDialogHeader>
                             <AlertDialogTitle>Captions</AlertDialogTitle>
                             <AlertDialogDescription>
-                                {/* <div className='flex justify-start pb-5'>
-                                    <Image src={imageUrl} className='rounded-sm' alt="Caption Image" width={200} height={50} />
-                                </div> */}
-                                {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any, index: number) => {
-                                    return (<div key={index}><p>{info}</p><br /></div>)
-                                })}
+                                <div>
+                                    <div className='flex justify-center pb-5'>
+                                        <Image src={imageUrl} className='rounded-sm' alt="Caption Image" width={200} height={50} />
+                                    </div>
+                                    {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any, index: number) => {
+                                        return (<div key={index}><p>{info}</p><br /></div>)
+                                    })}
+                                </div>
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

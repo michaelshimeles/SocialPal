@@ -65,8 +65,8 @@ const SettingsDashboard = ({ }) => {
                 description: "Assistant has been created",
             })
 
-            refetch()
             setCreateAssistantLoading(false)
+            refetch()
         } catch (error: any) {
             toast({
                 title: "Failed to create assistant",

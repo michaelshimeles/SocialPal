@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     console.log("files", files);
 
-    let fileId;
+    let fileId: string[] = [];
 
     if (!files) {
       fileId = [];
@@ -38,10 +38,8 @@ export async function POST(req: Request) {
       instructions: instructions,
       tools: [{ type: "code_interpreter" }, { type: "retrieval" }],
       model: "gpt-4-1106-preview",
-      // file_ids: fileId,
+      file_ids: fileId,
     });
-
-    console.log("myAssistant", myAssistant);
 
     const thread = await openai.beta.threads.create();
 

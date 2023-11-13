@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           content: [
             {
               type: "text",
-              text: "You are InstagramGPT, an Instagram caption creator that receives an images and comes up with 5 captions for the image for me to post on Instagram, please take in consideration the image shared",
+              text: "You are InstagramGPT, an Instagram caption creator that receives an images and comes up with 5 captions for the image for me to post on Instagram, please take in consideration the image shared.",
             },
             {
               type: "image_url",

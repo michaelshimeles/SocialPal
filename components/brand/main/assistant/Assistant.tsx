@@ -72,19 +72,20 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     const { data: assistantData, error, refetch } = useGetAssistants(brandId)
     const { data: threadData, error: threadError, refetch: threadRefetch, isLoading: threadLoading, isRefetching } = useGetThreads(value.thread_id)
 
+
     const renderMessages = (threadData: any) => {
         const messages = threadData?.body?.data.slice().reverse();
-
         return messages?.map((message: any, index: number) => {
             const isUserMessage = message.role === 'user';
+            console.log("message.content[0].text.value", message.content[0].text)
             return (
                 <div className='flex w-[100%]' key={index}>
                     {!threadLoading ?
                         <div key={index} className='w-full' style={{ textAlign: isUserMessage ? 'right' : 'left' }}>
                             {isUserMessage ?
                                 <div className='flex w-[100%] justify-end'>
-                                    <div className='flex justify-start items-start p-3'>
-                                        <ReactMarkdown className='min-w-[470px max-w-[470px] text-left border rounded-md p-3 mx-3' remarkPlugins={[breaks]} >{message.content[0].text.value}</ReactMarkdown>
+                                    <div className='flex justify-start items-center p-3'>
+                                        <ReactMarkdown className=' text-left border rounded-md p-3 mx-3' remarkPlugins={[breaks]} >{message.content[0].text.value}</ReactMarkdown>
                                         <Avatar>
                                             <AvatarImage src={user?.imageUrl} alt="profile" />
                                         </Avatar>
@@ -92,12 +93,12 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                                 </div>
                                 :
                                 <div className='flex w-[100%] justify-start'>
-                                    <div className='flex justify-start items-start p-3'>
+                                    <div className='flex justify-start items-center p-3'>
                                         <Avatar>
                                             <AvatarImage src="/bridge.svg" alt="Assistant" />
                                             {/* <AvatarFallback>CN</AvatarFallback> */}
                                         </Avatar>
-                                        <ReactMarkdown className="w-[50%] border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>
+                                        {<ReactMarkdown className=" border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>}
                                     </div>
                                 </div>
                             }
@@ -110,8 +111,12 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     };
 
     useEffect(() => {
-        threadRefetch()
-    }, [assistantData, threadData, sendingLoading, threadRefetch])
+        // This will run every time threadData changes
+        const scrollableContainer = document.getElementById('scrollable-container');
+        if (scrollableContainer) {
+            scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+        }
+    }, [assistantData, value]); // Depend on threadData
 
     return (
         <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">
