@@ -2,9 +2,11 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
+import { NavBar } from '@/components/NavBar'
 export default function Home() {
   return (
     <main className="flex min-w-screen flex-col items-center justify-between">
+      <NavBar />
       <div className='flex flex-col text-center mt-[5rem]'>
         <div className='flex justify-center text-center space-x-3'>
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">

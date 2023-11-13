@@ -20,7 +20,7 @@ const AnalyticsSection = ({ }) => {
                     <Metric>112</Metric>
                 </Card>
             </div>
-            <div className='flex flex-col gap-4 p-4 md:p-6'>
+            <div className='flex flex-col gap-4 px-4 md:px-6'>
                 <BarChartComponent />
             </div>
         </div>

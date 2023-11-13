@@ -77,7 +77,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
         const messages = threadData?.body?.data.slice().reverse();
         return messages?.map((message: any, index: number) => {
             const isUserMessage = message.role === 'user';
-            console.log("message.content[0].text.value", message.content[0].text)
+
             return (
                 <div className='flex w-[100%]' key={index}>
                     {!threadLoading ?
@@ -98,7 +98,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                                             <AvatarImage src="/bridge.svg" alt="Assistant" />
                                             {/* <AvatarFallback>CN</AvatarFallback> */}
                                         </Avatar>
-                                        {<ReactMarkdown className=" border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown>}
+                                        {!(message.content[0].text.value === "") ? <ReactMarkdown className=" border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown> :  <Icons.spinner className="h-4 w-4 mx-3 animate-spin" />}
                                     </div>
                                 </div>
                             }
@@ -120,7 +120,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
 
     return (
         <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">
-            <div className="flex flex-1 p-4 space-x-2">
+            <div className="flex flex-1 p-4 space-x-2 fixed z-10">
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -167,11 +167,16 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex justify-center items-center flex-col gap-1">
+            <div className="flex justify-center items-center flex-col gap-1 pb-[13rem]">
                 {renderMessages(threadData)}
-                <form className="flex gap-2 p-2 w-[650px] border rounded-md" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
-                    <Input {...assistantRegister("dialogue", { required: true })} className="flex-grow" placeholder="Type a message" />
-                    <Button disabled={sendingLoading} type='submit'>{!sendingLoading ? "Send" : "Loading..."}</Button>
+                <form className="flex flex-col gap-2 p-2 w-[650px] mb-8 border bottom-8 fixed rounded-md bg-white" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
+                    <div className='flex gap-2 items-start w-[650px]'>
+                        <Button size="sm" variant="outline">Content Pillars</Button>
+                    </div>
+                    <div className='flex gap-2 w-full'>
+                        <Input {...assistantRegister("dialogue", { required: true })} className="flex-grow" placeholder="Type a message" />
+                        <Button disabled={sendingLoading} type='submit' variant="outline">{!sendingLoading ? "Send" : "Loading..."}</Button>
+                    </div>
                 </form>
             </div>
         </div>

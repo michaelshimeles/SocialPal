@@ -25,5 +25,6 @@ export const useGetThreads = (threadId: string) => {
         queryKey: ["get-threads", threadId],
         queryFn: () => fetchThreads(threadId),
         enabled: !!threadId, // The query will not run until userId is truthy
+        refetchInterval: 10
     });
 };

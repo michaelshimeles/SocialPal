@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   const { data, error, isLoading } = useGetBrandsById(brandId)
   return (
-    <div className="grid h-screen min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
+    <div className="grid h-screen min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr] ">
       <div className="hidden border-r bg-zinc-100/40 lg:block dark:bg-zinc-800/40">
         <div className="flex flex-col gap-2">
           <LogoDashboard />
