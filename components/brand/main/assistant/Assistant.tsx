@@ -175,7 +175,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex justify-center items-center flex-col gap-1 pb-[13rem]">
+            <div className="flex justify-center items-center flex-col gap-1 pb-[13rem]" >
                 {renderMessages(threadData)}
                 <form className="flex flex-col gap-2 p-2 lg:min-w-[650px] md:min-w-[450px] mb-8 border bottom-8 fixed rounded-md bg-white" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
                     <div className='flex gap-2 items-start'>

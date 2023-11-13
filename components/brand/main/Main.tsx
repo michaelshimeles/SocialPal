@@ -19,7 +19,7 @@ const MainDashboard = () => {
             {search === "scheduler" && <Scheduler />}
             {search === "assistant" && <Assistant />}
             {search === "captions" && <Captions />}
-            {search === "analytics" && <AnalyticsSection />}
+            {/* {search === "analytics" && <AnalyticsSection />} */}
             {search === "settings" && <SettingsDashboard />}
         </main>
     );

@@ -74,7 +74,7 @@ const NavigationDashboard = ({ }) => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-subtitles"><path d="M7 13h4" /><path d="M15 13h2" /><path d="M7 9h2" /><path d="M13 9h4" /><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" /></svg>
                 Captions
             </Link>}
-            {search !== "analytics" ? <Link
+            {/* {search !== "analytics" ? <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-500 transition-all hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                 href="?click=analytics"
             >
@@ -115,7 +115,7 @@ const NavigationDashboard = ({ }) => {
                         <path d="m19 9-5 5-4-4-3 3" />
                     </svg>
                     Analytics
-                </Link>}
+                </Link>} */}
             {search !== "settings" ? <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-zinc-500 transition-all hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                 href="?click=settings"

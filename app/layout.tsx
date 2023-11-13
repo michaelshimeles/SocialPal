@@ -28,7 +28,7 @@ export default function RootLayout({
         <head>
           <meta name="facebook-domain-verification" content="ubi5ckw8aon6oqf4e8qt2ooin860x3" />
         </head>
-        <body className={GeistSans.className}>
+        <body className={GeistSans.className} >
           <Provider>
             <ThemeProvider
               attribute="class"
