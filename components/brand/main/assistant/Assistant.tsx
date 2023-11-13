@@ -98,7 +98,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
                                             <AvatarImage src="/bridge.svg" alt="Assistant" />
                                             {/* <AvatarFallback>CN</AvatarFallback> */}
                                         </Avatar>
-                                        {!(message.content[0].text.value === "") ? <ReactMarkdown className=" border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown> :  <Icons.spinner className="h-4 w-4 mx-3 animate-spin" />}
+                                        {!(message.content[0].text.value === "") ? <ReactMarkdown className=" border rounded-md p-3 mx-3" remarkPlugins={[breaks]}>{message.content[0].text.value}</ReactMarkdown> : <Icons.spinner className="h-4 w-4 mx-3 animate-spin" />}
                                     </div>
                                 </div>
                             }
@@ -111,12 +111,20 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
     };
 
     useEffect(() => {
+        console.log("Assistant selected:", value);
+        // threadRefetch()
         // This will run every time threadData changes
-        const scrollableContainer = document.getElementById('scrollable-container');
-        if (scrollableContainer) {
-            scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
-        }
-    }, [assistantData, value]); // Depend on threadData
+        const scrollToBottom = () => {
+            const scrollableContainer = document.getElementById('scrollable-container');
+            if (scrollableContainer) {
+                scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+            }
+        };
+
+        // Call the scroll function
+        scrollToBottom();
+
+    }, [threadData, value]); // Depend on threadData
 
     return (
         <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">
@@ -169,8 +177,8 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
             </div>
             <div className="flex justify-center items-center flex-col gap-1 pb-[13rem]">
                 {renderMessages(threadData)}
-                <form className="flex flex-col gap-2 p-2 w-[650px] mb-8 border bottom-8 fixed rounded-md bg-white" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
-                    <div className='flex gap-2 items-start w-[650px]'>
+                <form className="flex flex-col gap-2 p-2 lg:min-w-[650px] md:min-w-[450px] mb-8 border bottom-8 fixed rounded-md bg-white" onSubmit={assistantHandleSubmit(onAssistantHandle)}>
+                    <div className='flex gap-2 items-start'>
                         <Button size="sm" variant="outline">Content Pillars</Button>
                     </div>
                     <div className='flex gap-2 w-full'>
