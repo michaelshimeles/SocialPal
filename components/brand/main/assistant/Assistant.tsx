@@ -111,7 +111,7 @@ const Assistant: React.FC<AssistantProps> = ({ }) => {
 
     useEffect(() => {
         threadRefetch()
-    }, [assistantData, threadData, sendingLoading])
+    }, [assistantData, threadData, sendingLoading, threadRefetch])
 
     return (
         <div className="flex flex-col w-[100%] min-h-[85vh] overflow-y-scroll" id="scrollable-container">

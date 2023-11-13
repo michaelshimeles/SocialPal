@@ -70,8 +70,8 @@ const Captions = () => {
                                 {/* <div className='flex justify-start pb-5'>
                                     <Image src={imageUrl} className='rounded-sm' alt="Caption Image" width={200} height={50} />
                                 </div> */}
-                                {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any) => {
-                                    return (<div><p>{info}</p><br /></div>)
+                                {aiResult?.choices?.[0]?.message?.content.split("\n")?.map((info: any, index: number) => {
+                                    return (<div key={index}><p>{info}</p><br /></div>)
                                 })}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
