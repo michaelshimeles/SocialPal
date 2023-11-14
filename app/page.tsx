@@ -8,9 +8,9 @@ export default function Home() {
   return (
     <main className="flex min-w-screen flex-col items-center justify-between">
       <NavBar />
-      <div className='flex flex-col text-center mt-[5rem] mb-7'>
+      <div className='flex flex-col text-center mt-[4rem] mb-7'>
         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-          <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white ring-1 ring-gray-900/10 hover:ring-gray-900/20 bg-gradient-to-r from-violet-600 to-indigo-600">
+          <div className="relative rounded-full px-3 text-sm leading-6 text-white ring-1 ring-gray-900/10 hover:ring-gray-900/20 bg-gradient-to-r from-violet-600 to-indigo-600">
             A lot of features are on hold due to Tiktok & IG API approval taking forever.
           </div>
         </div>
