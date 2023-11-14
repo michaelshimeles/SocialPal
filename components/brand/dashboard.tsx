@@ -63,7 +63,7 @@ export default function Dashboard() {
             Assistant
           </h3>
           <p className="leading-7 [&:not(:first-child)]:mt-2">
-            An AI-powered social media advisor proficient in your brand's identity, offering strategic guidance.
+            An AI-powered social media advisor proficient in your brand&apos;s identity, offering strategic guidance.
           </p>
           <h3 className="mt-5 scroll-m-20 text-2xl font-semibold tracking-tight">
             Content Pillars
